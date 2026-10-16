@@ -1,65 +1,38 @@
-# Execução local
+# Rodar o projeto no computador
 
-## Pré-requisitos
+Para desenvolver, abra dois terminais PowerShell: um para o backend e outro para o frontend.
 
-- .NET 8 SDK.
-- Node.js 20+ e npm 10+.
-- Terminal PowerShell na raiz do repositório.
+## Antes de começar
 
-## Instalar dependências
-
-Restaure o projeto ASP.NET Core e instale o frontend:
+Instale o .NET 8 SDK e o Node.js (com npm). Na primeira vez, abra um terminal na pasta principal do projeto e instale as dependências:
 
 ```powershell
 dotnet restore .\EngenhariaDeCustos.csproj
-Set-Location .\ClientApp
+cd .\ClientApp
 npm ci
 ```
 
-## Executar frontend e backend em desenvolvimento
+## Iniciar o projeto para desenvolver
 
-Mantenha dois terminais PowerShell abertos.
-
-No primeiro, a partir da raiz do repositório, inicie o backend na porta `5000`:
+**Terminal 1 — backend:** abra o PowerShell na pasta principal do projeto e execute:
 
 ```powershell
-$env:ASPNETCORE_URLS = 'http://localhost:5000'
-dotnet run --project .\EngenhariaDeCustos.csproj --no-launch-profile
+dotnet run -- --urls=http://localhost:5000
 ```
 
-No segundo, inicie o Vite na porta `5173`:
+Deixe esse terminal aberto. O backend inicia em `http://localhost:5000`.
+
+**Terminal 2 — frontend:** abra outro PowerShell na pasta principal do projeto e execute:
 
 ```powershell
-Set-Location .\ClientApp
+cd .\ClientApp
 npm run dev
 ```
 
-Acesse `http://127.0.0.1:5173`. O Vite encaminha requisições `/api` para `http://localhost:5000`; chamadas frontend devem usar caminhos relativos. Nesta estrutura inicial ainda não existem controllers nem endpoints de negócio, portanto o proxy está preparado para uso futuro.
+Abra no navegador o endereço indicado pelo Vite, normalmente:
 
-O navegador acessa o servidor Vite durante o desenvolvimento. Em produção, o ASP.NET Core serve os arquivos compilados e a API na mesma origem.
-
-## Testar a hospedagem de produção local
-
-Na raiz do repositório, publique frontend e backend e gere a pasta ZIP:
-
-```powershell
-.\build.ps1
+```text
+http://127.0.0.1:5173
 ```
 
-Em outro terminal, inicie a DLL publicada:
-
-```powershell
-$env:ASPNETCORE_URLS = 'http://localhost:5000'
-dotnet .\artifacts\publish\EngenhariaDeCustos.dll
-```
-
-Acesse `http://localhost:5000`. O ASP.NET Core entrega `wwwroot/index.html` e os arquivos estáticos publicados. Essa execução usa o frontend compilado; ela não utiliza o servidor de desenvolvimento Vite.
-
-## Solução de problemas
-
-- **Porta `5173` ocupada:** o Vite usa `strictPort`; libere a porta antes de iniciá-lo. Se mudar a porta, atualize a URL aberta no navegador.
-- **Porta `5000` ocupada:** escolha outra porta em `ASPNETCORE_URLS` e ajuste o destino `server.proxy['/api']` em `ClientApp/vite.config.ts`.
-- **Frontend sem dependências:** execute `npm ci` dentro de `ClientApp/`.
-- **Build TypeScript/Vite falha:** execute `npm run build` dentro de `ClientApp/` e corrija os diagnósticos antes de publicar.
-- **Backend não inicia:** confirme o SDK com `dotnet --list-sdks` e restaure com `dotnet restore .\EngenhariaDeCustos.csproj`.
-- **Rota da API desconhecida exibe a aplicação:** o fallback está configurado para devolver 404 em caminhos `/api`; crie endpoints em controllers com rotas próprias quando a API for implementada.
+Durante o desenvolvimento, o navegador recebe a página do Vite. As chamadas para `/api` são encaminhadas ao backend na porta `5000`. Esta estrutura inicial ainda não tem funcionalidades ou endpoints de negócio.
