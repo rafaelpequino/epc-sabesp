@@ -1,6 +1,6 @@
 # Engenharia de Custos — EPC
 
-Estrutura inicial de uma aplicação ASP.NET Core 8 hospedando uma API e um frontend React 18 compilado pelo Vite.
+Aplicação ASP.NET Core 8 hospedando uma API e um frontend React 18 compilado pelo Vite e estilizado com Tailwind CSS 4.
 
 Consulte [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md) para a arquitetura, [`docs/EXECUCAO_LOCAL.md`](docs/EXECUCAO_LOCAL.md) para desenvolvimento local e [`docs/BUILD.md`](docs/BUILD.md) para publicação.
 

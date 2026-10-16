@@ -34,8 +34,8 @@ Se o script terminar com uma mensagem de erro, a publicação não foi concluíd
 
 O script `build.ps1`, localizado na pasta principal, executa estas etapas em sequência:
 
-1. Executa `npm ci` em `ClientApp/`, restaurando as dependências a partir do `package-lock.json`.
-2. Executa `npm run build`; o Vite gera os arquivos do navegador em `wwwroot/`.
+1. Executa `npm ci` em `ClientApp/`, restaurando as dependências, incluindo Tailwind CSS, a partir do `package-lock.json`.
+2. Executa `npm run build`; TypeScript e Vite compilam o frontend e o plugin Tailwind processa as classes utilitárias, gerando os arquivos do navegador em `wwwroot/`.
 3. Executa `dotnet publish` em Release, salvando o backend e os arquivos do frontend em `artifacts/publish/`.
 4. Cria `artifacts/EngenhariaDeCustos.zip` com o conteúdo de `artifacts/publish/` na raiz do ZIP.
 

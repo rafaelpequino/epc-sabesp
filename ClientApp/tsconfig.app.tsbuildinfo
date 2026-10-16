@@ -1,1 +1,1 @@
-{"root":["./src/main.tsx"],"version":"5.9.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/components/common/formfield.tsx","./src/components/login/logincard.tsx","./src/components/login/loginform.tsx","./src/components/login/loginheader.tsx","./src/pages/loginpage.tsx"],"version":"5.9.3"}
