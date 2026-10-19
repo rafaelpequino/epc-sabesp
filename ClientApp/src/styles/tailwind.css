@@ -1,7 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand: #017dc3;
+  /* Azul: cor principal da identidade; domina a interface. */
+  --color-brand: #0093dd;
+  --color-brand-50: #ebf7fd;
+  --color-brand-100: #d6eefa;
+  --color-brand-200: #a8dbf5;
+  --color-brand-600: #0079b5;
+  --color-brand-700: #00608f;
+
+  /* Amarelo, laranja e verde: acentos para detalhes pontuais. */
+  --color-accent-yellow: #fec513;
+  --color-accent-orange: #f9b181;
+  --color-accent-green: #649a20;
+
   --color-ink-muted: #5b6b86;
   --color-ink: #172433;
+  --color-page: #edf6fb;
+  --color-line: #d3e0e8;
 }

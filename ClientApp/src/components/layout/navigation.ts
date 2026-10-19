@@ -1,0 +1,44 @@
+import type { IconName } from '../common/Icon'
+
+export type NavItem = {
+  label: string
+  to: string
+  icon: IconName
+  end?: boolean
+}
+
+export type NavSection = {
+  title?: string
+  items: NavItem[]
+}
+
+export const SISTEMA_BASE_PATH = '/sistema'
+
+export const NAV_SECTIONS: NavSection[] = [
+  {
+    items: [{ label: 'Início', to: SISTEMA_BASE_PATH, icon: 'home', end: true }],
+  },
+  {
+    title: 'DRC',
+    items: [
+      { label: "KIT's Orçamentos", to: `${SISTEMA_BASE_PATH}/kits-orcamentos`, icon: 'briefcase' },
+      { label: 'Mapeador IA', to: `${SISTEMA_BASE_PATH}/mapeador-ia`, icon: 'search' },
+    ],
+  },
+  {
+    title: 'Demandas',
+    items: [
+      { label: 'Nova Demanda', to: `${SISTEMA_BASE_PATH}/demandas/nova`, icon: 'filePlus' },
+      { label: 'Fila de Aprovação', to: `${SISTEMA_BASE_PATH}/demandas/fila-aprovacao`, icon: 'inbox' },
+    ],
+  },
+  {
+    title: 'Bancos',
+    items: [
+      { label: 'Cotações Esp.', to: `${SISTEMA_BASE_PATH}/bancos/cotacoes`, icon: 'tag' },
+      { label: 'Fornecedores Esp.', to: `${SISTEMA_BASE_PATH}/bancos/fornecedores`, icon: 'users' },
+      { label: 'Planilhas', to: `${SISTEMA_BASE_PATH}/bancos/planilhas`, icon: 'file' },
+      { label: 'Peças de Aço', to: `${SISTEMA_BASE_PATH}/bancos/pecas-aco`, icon: 'hexagon' },
+    ],
+  },
+]

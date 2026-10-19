@@ -32,13 +32,25 @@ Entity Framework Core, outros ORMs e ferramentas de migrations de ORM não fazem
 - `ClientApp/src/services/`: futuras chamadas HTTP à API.
 - `ClientApp/src/styles/tailwind.css`: importação do Tailwind CSS e paleta de cores do projeto, registrada como tokens de tema (`@theme`). A estilização deve ser feita com classes utilitárias nos componentes, sem CSS de apresentação escrito à mão.
 
+  **Regra de uso das cores: o azul é sempre o foco.** Botões, links, item ativo do menu, ícones, barras, gráficos, cabeçalhos de cartão e demais elementos de destaque devem usar o azul (`brand` e seus tons). Amarelo, laranja e verde são **acentos**, reservados a detalhes pontuais (por exemplo, indicar status como "finalizada"/"em aberto" ou realçar um pequeno elemento). Eles nunca devem ser a cor predominante de um cartão, página, botão principal ou gráfico, nem competir com o azul. Não usar outras cores de matiz (roxo, rosa etc.) na interface; vermelho só para erros.
+
   | Token | Cor | Classes (exemplos) | Uso |
   | --- | --- | --- | --- |
-  | `--color-brand` | `#017DC3` | `bg-brand`, `text-brand` | Azul principal |
+  | `--color-brand` | `#0093DD` | `bg-brand`, `text-brand` | **Azul principal** (cor de destaque da interface) |
+  | `--color-brand-50` | `#EBF7FD` | `bg-brand-50` | Fundos muito claros e hover |
+  | `--color-brand-100` | `#D6EEFA` | `bg-brand-100` | Fundos de ícones, item ativo e trilhas de barras |
+  | `--color-brand-200` | `#A8DBF5` | `text-brand-200` | Ilustrações e detalhes suaves |
+  | `--color-brand-600` | `#0079B5` | `hover:bg-brand-600`, `text-brand-600` | Hover de botões e links em texto pequeno (melhor contraste) |
+  | `--color-brand-700` | `#00608F` | `text-brand-700` | Texto azul escuro (títulos e item ativo) |
+  | `--color-accent-yellow` | `#FEC513` | `bg-accent-yellow` | Acento: amarelo |
+  | `--color-accent-orange` | `#F9B181` | `bg-accent-orange` | Acento: laranja |
+  | `--color-accent-green` | `#649A20` | `bg-accent-green`, `text-accent-green` | Acento: verde |
   | `--color-ink-muted` | `#5B6B86` | `text-ink-muted` | Cinza para textos secundários |
   | `--color-ink` | `#172433` | `text-ink` | Cinza escuro para textos principais |
+  | `--color-page` | `#EDF6FB` | `bg-page` | Fundo das páginas |
+  | `--color-line` | `#D3E0E8` | `border-line` | Bordas e divisores |
 
-  A paleta está definida, mas os componentes atuais ainda usam valores fixos (como `#0b80bd`); eles devem migrar para esses tokens gradualmente. Cores novas entram no `@theme`, e não como valores fixos nas classes.
+  Os tons do azul (`brand-*`) derivam do azul principal. Cores novas entram no `@theme`, e não como valores fixos nas classes (exemplo: `bg-brand`, nunca `bg-[#0093DD]`). Alguns textos do login ainda usam cinzas fixos e devem migrar gradualmente para `ink`/`ink-muted`. No dashboard, o verde (finalizadas) e o amarelo (em aberto) aparecem apenas no gráfico de status das demandas e no ícone de confirmação.
 - `ClientApp/src/assets/images/`: imagens-fonte importadas pelos componentes e processadas pelo Vite.
 - `wwwroot/`: saída gerada do build Vite, servida pelo ASP.NET Core. Não é a pasta de fontes.
 - `docs/`: documentação técnica.
@@ -46,7 +58,18 @@ Entity Framework Core, outros ORMs e ferramentas de migrations de ORM não fazem
 
 `ClientApp` contém os fontes editáveis e `node_modules` usado no desenvolvimento/build. `wwwroot` contém os arquivos estáticos compilados e reconstruíveis que o ASP.NET Core serve; não inclui dependências Node.
 
-A tela inicial está disponível em `/login`; a rota `/` (e qualquer rota desconhecida) redireciona para `/login` pelo React Router (`<Navigate>` em `App.tsx`), sem recarregar a página. A interface de login é apenas visual e ainda não autentica usuários.
+A tela inicial está disponível em `/login`. A rota `/` (e qualquer rota desconhecida) redireciona para `/sistema`, que exige login e, sem sessão válida, leva a `/login` (`<Navigate>` em `App.tsx`).
+
+### Autenticação temporária (somente frontend)
+
+Enquanto não há backend nem banco, o login aceita `admin` / `admin` (`services/authService.ts`). Após o login, é gravado em `localStorage` um token no formato JWT (`header.payload.signature`, com `exp` de 8 h). **O token não é assinado e não oferece segurança real**; ele só simula o fluxo. O `AuthContext` (`auth/`) expõe `login`, `logout` e o usuário, e `ProtectedRoute` bloqueia todas as rotas de `/sistema`. Ao existir API, substituir `authService.ts` por chamadas reais e validar o JWT no servidor.
+
+### Área logada (`/sistema`)
+
+- `layouts/SistemaLayout.tsx`: layout padrão com `Header` e `Sidebar` (em `components/layout/`) e `<Outlet>`; toda página do sistema deve ser rota filha dele. Responsivo: a partir de `lg` (1024 px) a sidebar fica fixa ao lado do conteúdo; abaixo disso ela vira uma gaveta escondida, aberta pelo botão hambúrguer do `Header` e fechada pelo overlay, pela tecla Esc, por navegação ou pelo próprio botão. O texto "EPC - Projetos Estratégicos" aparece apenas a partir de `md` (768 px).
+- Itens do menu ficam em `components/layout/navigation.ts`.
+- `pages/sistema/InicioPage.tsx`: página inicial (Visão geral), montada com `components/dashboard/`. Os dados vêm de `services/dashboardService.ts`, atualmente fictícios.
+- Ícones SVG em `components/common/Icon.tsx`.
 
 ## Comunicação e acesso a dados
 

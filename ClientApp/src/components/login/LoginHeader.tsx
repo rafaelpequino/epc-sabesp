@@ -8,7 +8,7 @@ function LoginHeader() {
         src={sabespIcon}
         alt="Sabesp"
       />
-      <span className="h-14 w-px bg-[#d3e0e8]" aria-hidden="true" />
+      <span className="h-14 w-px bg-line" aria-hidden="true" />
       <h1
         className="flex flex-col text-left text-sm font-medium uppercase leading-tight tracking-wide text-[#586a79]"
         id="login-title"
