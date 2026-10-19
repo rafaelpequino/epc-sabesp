@@ -39,4 +39,4 @@ http://127.0.0.1:5173
 
 O endereço `/` redireciona para `/login`. A tela de login é somente uma interface: ainda não autentica nem envia os dados.
 
-Durante o desenvolvimento, o navegador recebe a página do Vite. As chamadas para `/api` são encaminhadas ao backend na porta `5000`. Os estilos da interface devem ser feitos com classes utilitárias Tailwind nos componentes React; `src/styles/tailwind.css` contém somente a importação necessária para carregar o Tailwind.
+Durante o desenvolvimento, o navegador recebe a página do Vite. As chamadas para `/api` são encaminhadas ao backend na porta `5000`. Os estilos da interface devem ser feitos com classes utilitárias Tailwind nos componentes React; `src/styles/tailwind.css` contém a importação do Tailwind e a paleta de cores do projeto (tokens `@theme`, descritos em `ARQUITETURA.md`).

@@ -1,16 +1,13 @@
-import { useEffect } from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 
 function App() {
-  const isLoginRoute = window.location.pathname === '/login'
-
-  useEffect(() => {
-    if (!isLoginRoute) {
-      window.location.replace('/login')
-    }
-  }, [isLoginRoute])
-
-  return isLoginRoute ? <LoginPage /> : null
+  return (
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
+  )
 }
 
 export default App

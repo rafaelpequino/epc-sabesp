@@ -5,6 +5,7 @@
 # Frontend dependencies and temporary build output
 ClientApp/node_modules/
 ClientApp/dist/
+ClientApp/tsconfig.app.tsbuildinfo
 
 # Generated Vite output; other wwwroot content remains versionable
 /wwwroot/index.html

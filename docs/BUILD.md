@@ -46,7 +46,7 @@ Antes de publicar, o script limpa somente a pasta `artifacts/publish/` e o ZIP a
 No computador usado para compilar, instale:
 
 - .NET 8 SDK.
-- Node.js 20 ou superior e npm 10 ou superior.
+- Node.js 20 ou superior e npm 10 ou superior (versões recomendadas; o `package.json` e o `build.ps1` não validam a versão instalada).
 - PowerShell no Windows.
 
 Confira as ferramentas com:
