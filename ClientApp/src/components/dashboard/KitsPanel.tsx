@@ -6,7 +6,7 @@ function KitsPanel({ kits }: { kits: DashboardOverview['kits'] }) {
   const maxQuotations = Math.max(...kits.ranking.map((kit) => kit.quotations), 1)
 
   return (
-    <Panel icon="tag" title="KITS" subtitle="Quantidade de cotações por kit" to="/sistema/kits-orcamentos">
+    <Panel icon="tag" title="KITS" subtitle="Quantidade de cotações por kit" to="/sistema/kits-drc">
       <ul className="divide-y divide-line">
         {kits.ranking.map((kit) => (
           <li key={kit.name} className="flex items-center gap-3 py-2.5">

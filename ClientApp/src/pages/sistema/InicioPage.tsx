@@ -4,6 +4,7 @@ import DemandsPanel from '../../components/dashboard/DemandsPanel'
 import KitsPanel from '../../components/dashboard/KitsPanel'
 import OverviewCards from '../../components/dashboard/OverviewCards'
 import SystemSummary from '../../components/dashboard/SystemSummary'
+import PageHeader from '../../components/layout/PageHeader'
 import { getDashboardOverview } from '../../services/dashboardService'
 
 function InicioPage() {
@@ -11,9 +12,7 @@ function InicioPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <header>
-        <h1 className="text-3xl font-extrabold text-ink">Visão geral</h1>
-      </header>
+      <PageHeader title="Visão geral" />
 
       <OverviewCards data={data} />
 

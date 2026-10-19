@@ -69,6 +69,8 @@ Enquanto não há backend nem banco, o login aceita `admin` / `admin` (`services
 - `layouts/SistemaLayout.tsx`: layout padrão com `Header` e `Sidebar` (em `components/layout/`) e `<Outlet>`; toda página do sistema deve ser rota filha dele. Responsivo: a partir de `lg` (1024 px) a sidebar fica fixa ao lado do conteúdo; abaixo disso ela vira uma gaveta escondida, aberta pelo botão hambúrguer do `Header` e fechada pelo overlay, pela tecla Esc, por navegação ou pelo próprio botão. O texto "EPC - Projetos Estratégicos" aparece apenas a partir de `md` (768 px).
 - Itens do menu ficam em `components/layout/navigation.ts`.
 - `pages/sistema/InicioPage.tsx`: página inicial (Visão geral), montada com `components/dashboard/`. Os dados vêm de `services/dashboardService.ts`, atualmente fictícios.
+- `pages/sistema/KitsDrcPage.tsx` (`/sistema/kits-drc`): lista de kits de orçamentação paramétrica, com `components/kits/KitFilters.tsx` e `KitCard.tsx`. Os filtros são mutuamente exclusivos: ou **tipo de rede** (Água/Esgoto), ou **método construtivo** (VCA/MND); clicar no filtro ativo (ou em "Limpar filtro") o remove. A contagem de kits encontrados fica na página, entre os filtros e os cartões. Cada kit declara suas `tags` em `services/kitsService.ts` (dados fictícios), e o filtro mostra os kits que contêm a tag. Kits com `status: 'soon'` aparecem desabilitados ("Em breve"). Novos filtros entram em `KIT_FILTER_GROUPS`.
+- `components/layout/PageHeader.tsx`: título (e subtítulo opcional) padrão das páginas do sistema.
 - Ícones SVG em `components/common/Icon.tsx`.
 
 ## Comunicação e acesso a dados

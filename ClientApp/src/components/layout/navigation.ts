@@ -21,7 +21,7 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     title: 'DRC',
     items: [
-      { label: "KIT's Orçamentos", to: `${SISTEMA_BASE_PATH}/kits-orcamentos`, icon: 'briefcase' },
+      { label: 'Kits DRC', to: `${SISTEMA_BASE_PATH}/kits-drc`, icon: 'briefcase' },
       { label: 'Mapeador IA', to: `${SISTEMA_BASE_PATH}/mapeador-ia`, icon: 'search' },
     ],
   },
