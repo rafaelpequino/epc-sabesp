@@ -28,6 +28,11 @@ function CotacoesEspPage() {
     setApplied(draft)
   }
 
+  function handleClearSearch() {
+    setDraft({ ...draft, search: '' })
+    setApplied({ ...applied, search: '' })
+  }
+
   function handleClear() {
     const cleared = { ...EMPTY_COTACAO_FILTERS, search: draft.search }
     setDraft(cleared)
@@ -63,8 +68,19 @@ function CotacoesEspPage() {
               value={draft.search}
               onChange={(event) => setDraft({ ...draft, search: event.target.value })}
               placeholder="Pesquisar por item…"
-              className="h-11 w-full rounded-lg border border-line bg-white pl-10 pr-3.5 text-sm text-ink outline-none transition-[border-color,box-shadow] placeholder:text-ink-muted focus:border-brand focus:ring-4 focus:ring-brand-100"
+              className="h-11 w-full rounded-lg border border-line bg-white pl-10 pr-11 text-sm text-ink outline-none transition-[border-color,box-shadow] placeholder:text-ink-muted focus:border-brand focus:ring-4 focus:ring-brand-100 [&::-webkit-search-cancel-button]:appearance-none"
             />
+            {applied.search && (
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                aria-label="Limpar busca"
+                title="Limpar busca"
+                className="absolute right-2 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-lg bg-brand-50 text-brand-700 transition-colors hover:bg-brand-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                <Icon name="close" className="size-4" />
+              </button>
+            )}
           </label>
           <Button type="submit" icon="search">
             Buscar
@@ -81,9 +97,16 @@ function CotacoesEspPage() {
         />
       </form>
 
-      <p className="text-sm font-semibold text-ink-muted" role="status">
-        {visibleCotacoes.length} {visibleCotacoes.length === 1 ? 'cotação encontrada' : 'cotações encontradas'}
-      </p>
+      <div className="flex flex-col gap-1">
+        {applied.search && (
+          <p className="text-base text-ink-muted">
+            Buscando por: <strong className="font-bold text-brand-700">“{applied.search}”</strong>
+          </p>
+        )}
+        <p className="text-sm font-semibold text-ink-muted" role="status">
+          {visibleCotacoes.length} {visibleCotacoes.length === 1 ? 'cotação encontrada' : 'cotações encontradas'}
+        </p>
+      </div>
 
       {visibleCotacoes.length > 0 ? (
         <CotacoesTable cotacoes={visibleCotacoes} />

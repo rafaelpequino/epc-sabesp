@@ -50,7 +50,7 @@ Entity Framework Core, outros ORMs e ferramentas de migrations de ORM não fazem
   | `--color-page` | `#EDF6FB` | `bg-page` | Fundo das páginas |
   | `--color-line` | `#D3E0E8` | `border-line` | Bordas e divisores |
 
-  Os tons do azul (`brand-*`) derivam do azul principal. Cores novas entram no `@theme`, e não como valores fixos nas classes (exemplo: `bg-brand`, nunca `bg-[#0093DD]`). Alguns textos do login ainda usam cinzas fixos e devem migrar gradualmente para `ink`/`ink-muted`. No dashboard, o verde (finalizadas) e o amarelo (em aberto) aparecem apenas no gráfico de status das demandas e no ícone de confirmação.
+  Os tons do azul (`brand-*`) derivam do azul principal. Uma regra global em `@layer base` do mesmo arquivo aplica `cursor: pointer` a todo `button` habilitado; não é preciso repetir `cursor-pointer` em novos botões. Cores novas entram no `@theme`, e não como valores fixos nas classes (exemplo: `bg-brand`, nunca `bg-[#0093DD]`). Alguns textos do login ainda usam cinzas fixos e devem migrar gradualmente para `ink`/`ink-muted`. No dashboard, o verde (finalizadas) e o amarelo (em aberto) aparecem apenas no gráfico de status das demandas e no ícone de confirmação.
 - `ClientApp/src/assets/images/`: imagens-fonte importadas pelos componentes e processadas pelo Vite.
 - `wwwroot/`: saída gerada do build Vite, servida pelo ASP.NET Core. Não é a pasta de fontes.
 - `docs/`: documentação técnica.
