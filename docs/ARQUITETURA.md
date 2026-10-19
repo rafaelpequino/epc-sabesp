@@ -70,7 +70,9 @@ Enquanto não há backend nem banco, o login aceita `admin` / `admin` (`services
 - Itens do menu ficam em `components/layout/navigation.ts`.
 - `pages/sistema/InicioPage.tsx`: página inicial (Visão geral), montada com `components/dashboard/`. Os dados vêm de `services/dashboardService.ts`, atualmente fictícios.
 - `pages/sistema/KitsDrcPage.tsx` (`/sistema/kits-drc`): lista de kits de orçamentação paramétrica, com `components/kits/KitFilters.tsx` e `KitCard.tsx`. Os filtros são mutuamente exclusivos: ou **tipo de rede** (Água/Esgoto), ou **método construtivo** (VCA/MND); clicar no filtro ativo (ou em "Limpar filtro") o remove. A contagem de kits encontrados fica na página, entre os filtros e os cartões. Cada kit declara suas `tags` em `services/kitsService.ts` (dados fictícios), e o filtro mostra os kits que contêm a tag. Kits com `status: 'soon'` aparecem desabilitados ("Em breve"). Novos filtros entram em `KIT_FILTER_GROUPS`.
-- `components/layout/PageHeader.tsx`: título (e subtítulo opcional) padrão das páginas do sistema.
+- `components/layout/PageHeader.tsx`: título (e subtítulo opcional) padrão das páginas do sistema; aceita `actions` para botões ao lado do título.
+- `pages/sistema/CotacoesEspPage.tsx` (`/sistema/cotacoes-esp`): lista de cotações especiais com busca por item e filtros (setor em chips; responsável, fornecedor e período de IO em selects), aplicados ao clicar em "Buscar"/Enter. Usa `components/cotacoes/` (`CotacaoFilters`, `CotacoesTable`) e `services/cotacoesService.ts` (dados fictícios e lógica de filtro).
+- **Botões:** use sempre `components/common/Button.tsx` (variantes `primary` e `outline`, ambas em azul); selects usam `components/common/SelectField.tsx`.
 - Ícones SVG em `components/common/Icon.tsx`.
 
 ## Comunicação e acesso a dados

@@ -3,6 +3,7 @@ import ProtectedRoute from './auth/ProtectedRoute'
 import SistemaLayout from './layouts/SistemaLayout'
 import LoginPage from './pages/LoginPage'
 import InicioPage from './pages/sistema/InicioPage'
+import CotacoesEspPage from './pages/sistema/CotacoesEspPage'
 import KitsDrcPage from './pages/sistema/KitsDrcPage'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route element={<SistemaLayout />}>
           <Route index element={<InicioPage />} />
           <Route path="kits-drc" element={<KitsDrcPage />} />
+          <Route path="cotacoes-esp" element={<CotacoesEspPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/sistema" replace />} />

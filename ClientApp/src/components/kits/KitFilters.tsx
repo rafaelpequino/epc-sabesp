@@ -1,4 +1,4 @@
-import Icon from '../common/Icon'
+import FilterPanel from '../common/FilterPanel'
 import { KIT_FILTER_GROUPS, type KitFilterGroup, type KitFilterId } from '../../services/kitsService'
 
 type KitFiltersProps = {
@@ -49,30 +49,20 @@ function KitFilters({ activeFilter, onChange }: KitFiltersProps) {
   const [rede, metodo] = KIT_FILTER_GROUPS
 
   return (
-    <section className="rounded-2xl border border-line bg-white p-4 shadow-sm" aria-label="Filtros de kits">
-      <header className="flex flex-wrap items-center gap-x-3 gap-y-1">
-        <Icon name="filter" className="size-4 text-brand" />
-        <h2 className="text-sm font-bold text-ink">Filtros</h2>
-        {activeFilter && (
-          <button
-            type="button"
-            onClick={() => onChange(null)}
-            className="ml-auto inline-flex min-h-8 cursor-pointer items-center gap-1 rounded-lg px-2 text-xs font-semibold text-brand-600 transition-colors hover:bg-brand-50"
-          >
-            <Icon name="close" className="size-3.5" />
-            Limpar filtro
-          </button>
-        )}
-      </header>
-
-      <div className="@container mt-4">
+    <FilterPanel
+      label="Filtros de kits"
+      hasActiveFilters={activeFilter !== null}
+      onClear={() => onChange(null)}
+      clearLabel="Limpar filtro"
+    >
+      <div className="@container">
         <div className="flex flex-col gap-4 @min-[22rem]:flex-row @min-[22rem]:items-stretch @min-[22rem]:gap-6">
           <FilterChips group={rede} activeFilter={activeFilter} onChange={onChange} />
           <div className="h-px bg-line @min-[22rem]:h-auto @min-[22rem]:w-px" aria-hidden="true" />
           <FilterChips group={metodo} activeFilter={activeFilter} onChange={onChange} />
         </div>
       </div>
-    </section>
+    </FilterPanel>
   )
 }
 

@@ -35,7 +35,7 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     title: 'Bancos',
     items: [
-      { label: 'Cotações Esp.', to: `${SISTEMA_BASE_PATH}/bancos/cotacoes`, icon: 'tag' },
+      { label: 'Cotações Esp.', to: `${SISTEMA_BASE_PATH}/cotacoes-esp`, icon: 'tag' },
       { label: 'Fornecedores Esp.', to: `${SISTEMA_BASE_PATH}/bancos/fornecedores`, icon: 'users' },
       { label: 'Planilhas', to: `${SISTEMA_BASE_PATH}/bancos/planilhas`, icon: 'file' },
       { label: 'Peças de Aço', to: `${SISTEMA_BASE_PATH}/bancos/pecas-aco`, icon: 'hexagon' },

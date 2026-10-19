@@ -13,8 +13,7 @@ function KitsDrcPage() {
   return (
     <div className="flex flex-col gap-4">
       <PageHeader title="Kits DRC">
-        Orçamentação paramétrica: geração automatizada de orçamentos baseada no{' '}
-        <strong className="font-bold text-brand-700">Banco de Preços da SABESP</strong>.
+        Geração automatizada de orçamentos baseada no Banco de Preços da SABESP.
       </PageHeader>
 
       <KitFilters activeFilter={activeFilter} onChange={setActiveFilter} />

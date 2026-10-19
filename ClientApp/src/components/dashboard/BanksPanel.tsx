@@ -14,7 +14,7 @@ function BanksPanel({ banks }: { banks: DashboardOverview['banks'] }) {
   const maxRecords = Math.max(...banks.items.map((bank) => bank.records), 1)
 
   return (
-    <Panel icon="database" title="Bancos" subtitle="Registros por banco" to="/sistema/bancos/cotacoes">
+    <Panel icon="database" title="Bancos" subtitle="Registros por banco" to="/sistema/cotacoes-esp">
       <ul className="flex flex-col gap-2">
         {banks.items.map((bank) => (
           <li key={bank.key} className="flex items-center gap-3 rounded-xl border border-line px-3 py-2">
