@@ -13,7 +13,7 @@ import {
   type CotacaoFilters as Filters,
 } from '../../services/cotacoesService'
 
-function CotacoesEspPage() {
+function CotacoesPage() {
   const cotacoes = useMemo(getCotacoes, [])
   const [draft, setDraft] = useState<Filters>(EMPTY_COTACAO_FILTERS)
   const [applied, setApplied] = useState<Filters>(EMPTY_COTACAO_FILTERS)
@@ -119,4 +119,4 @@ function CotacoesEspPage() {
   )
 }
 
-export default CotacoesEspPage
+export default CotacoesPage
