@@ -27,9 +27,6 @@ export function Panel({ icon, title, subtitle, to, children }: PanelProps) {
           <h2 className="text-base font-bold text-ink">{title}</h2>
           <p className="text-xs text-ink-muted">{subtitle}</p>
         </div>
-        <Link className="flex items-center gap-1 text-xs font-semibold text-brand-600 hover:underline" to={to}>
-          Ver todos <Icon name="arrowRight" className="size-3.5" />
-        </Link>
       </header>
       <div className="mt-3">{children}</div>
     </section>
