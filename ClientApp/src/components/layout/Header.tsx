@@ -31,11 +31,10 @@ function Header({ isMenuOpen, onMenuToggle, menuControlsId }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-2.5">
+        <span className="hidden text-sm font-semibold text-ink sm:inline">{displayName}</span>
         <span className="grid size-8 place-items-center rounded-full bg-brand text-sm font-bold text-white">
           {displayName.charAt(0).toUpperCase()}
         </span>
-        <span className="hidden text-sm font-semibold text-ink sm:inline">{displayName}</span>
-        <Icon name="chevronDown" className="size-4 text-ink-muted" />
       </div>
     </header>
   )
