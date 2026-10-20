@@ -50,7 +50,7 @@ function Sidebar({ id, isOpen }: SidebarProps) {
       <button
         type="button"
         onClick={logout}
-        className="flex cursor-pointer items-center gap-3 rounded-lg px-3.5 py-2.5 text-[15px] font-semibold text-ink transition-colors hover:bg-brand-50"
+        className="mt-8 flex cursor-pointer items-center gap-3 rounded-lg px-3.5 py-2.5 text-[15px] font-semibold text-ink transition-colors hover:bg-brand-50"
       >
         <Icon name="logout" />
         Sair
