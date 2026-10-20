@@ -10,7 +10,7 @@ function PlanilhasPage() {
   return (
     <div className="flex flex-col gap-4">
       <PageHeader title="Planilhas" actions={<Button icon="plus">Adicionar planilha</Button>}>
-        Organize e consulte as planilhas compartilhadas por setor.
+        Banco de planilhas padrão por setor
       </PageHeader>
 
       {planilhas.map((planilha) => (

@@ -25,7 +25,7 @@ function FornecedoresPage() {
   return (
     <div className="flex flex-col gap-4">
       <PageHeader title="Fornecedores" actions={<Button icon="plus">Novo Fornecedor</Button>}>
-        Consulte e mantenha os dados dos fornecedores em um só lugar.
+        Banco de fornecedores - conectado com o banco de cotações especiais
       </PageHeader>
 
       <form onSubmit={handleSubmit}>
