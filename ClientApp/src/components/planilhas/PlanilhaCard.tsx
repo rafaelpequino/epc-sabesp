@@ -9,19 +9,37 @@ function formatIo(io: { month: number; year: number }): string {
   return `${MONTH_LABELS[io.month - 1]}/${io.year}`
 }
 
+function RowButton({ icon, label, size }: { icon: 'download' | 'trash'; label: string; size: string }) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={label.split(' ')[0]}
+      className={`grid ${size} shrink-0 cursor-pointer place-items-center rounded-lg text-ink-muted transition-colors hover:bg-brand-100 hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand`}
+    >
+      <Icon name={icon} className="size-4" />
+    </button>
+  )
+}
+
 function PlanilhaCard({ planilha }: { planilha: Planilha }) {
   return (
     <section
       aria-label={planilha.nome}
       className="grid gap-4 rounded-2xl border border-line bg-white p-4 shadow-sm lg:grid-cols-[minmax(16rem,1fr)_2fr]"
     >
-      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 rounded-xl bg-brand-50 p-4 sm:p-5 lg:flex-col lg:items-start lg:justify-center lg:gap-2 lg:p-6">
+      <div className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-3 rounded-xl bg-brand-50 p-4 sm:p-5 lg:flex-col lg:items-start lg:justify-center lg:gap-2 lg:p-6 lg:pr-14">
         <div className="min-w-0">
           <h2 className="text-lg font-extrabold text-ink sm:text-xl">{planilha.nome}</h2>
           <p className="text-sm text-ink-muted">Setor: {planilha.setor.toUpperCase()}</p>
         </div>
-        <div className="lg:hidden">
-          <Button variant="outline" icon="upload">Adicionar versão</Button>
+        <div className="flex items-center gap-2 lg:contents">
+          <div className="lg:hidden">
+            <Button variant="outline" icon="upload">Adicionar versão</Button>
+          </div>
+          <div className="lg:absolute lg:right-3 lg:top-3">
+            <RowButton icon="trash" label={`Excluir planilha ${planilha.nome}`} size="size-9" />
+          </div>
         </div>
       </div>
 
@@ -43,14 +61,10 @@ function PlanilhaCard({ planilha }: { planilha: Planilha }) {
                 <Icon name="user" className="size-4 shrink-0 text-ink-muted" />
                 <span className="min-w-0 break-words">{versao.responsavel}</span>
               </span>
-              <button
-                type="button"
-                aria-label={`Baixar ${planilha.nome} ${formatIo(versao.io)}`}
-                title="Baixar"
-                className="grid size-9 shrink-0 cursor-pointer place-items-center rounded-lg text-ink-muted transition-colors hover:bg-brand-100 hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-              >
-                <Icon name="download" className="size-4" />
-              </button>
+              <div className="flex shrink-0">
+                <RowButton icon="download" label={`Baixar ${planilha.nome} ${formatIo(versao.io)}`} size="size-9" />
+                <RowButton icon="trash" label={`Excluir ${planilha.nome} ${formatIo(versao.io)}`} size="size-9" />
+              </div>
             </li>
           ))}
         </ul>
@@ -84,15 +98,9 @@ function PlanilhaCard({ planilha }: { planilha: Planilha }) {
                     </span>
                   </td>
                   <td className="px-4 py-3.5">
-                    <div className="flex justify-end">
-                      <button
-                        type="button"
-                        aria-label={`Baixar ${planilha.nome} ${formatIo(versao.io)}`}
-                        title="Baixar"
-                        className="grid size-8 cursor-pointer place-items-center rounded-lg text-ink-muted transition-colors hover:bg-brand-100 hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                      >
-                        <Icon name="download" className="size-4" />
-                      </button>
+                    <div className="flex justify-end gap-1">
+                      <RowButton icon="download" label={`Baixar ${planilha.nome} ${formatIo(versao.io)}`} size="size-8" />
+                      <RowButton icon="trash" label={`Excluir ${planilha.nome} ${formatIo(versao.io)}`} size="size-8" />
                     </div>
                   </td>
                 </tr>

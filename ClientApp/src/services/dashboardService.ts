@@ -15,11 +15,10 @@ export function getDashboardOverview(): DashboardOverview {
       total: 12,
       totalQuotations: 235,
       ranking: [
-        { name: 'Kit 001 - Residencial', quotations: 68 },
-        { name: 'Kit 002 - Comercial', quotations: 52 },
-        { name: 'Kit 003 - Industrial', quotations: 41 },
-        { name: 'Kit 004 - Saneamento', quotations: 28 },
-        { name: 'Kit 005 - Infraestrutura', quotations: 18 },
+        { name: 'Kit 01 - Rede de Distribuição', quotations: 68 },
+        { name: 'Kit 02 - Recomposição Asfáltica', quotations: 52 },
+        { name: 'Kit 03 - VCA Esgotamento', quotations: 38 },
+        { name: 'Kit 04 - VCA Pavimentação', quotations: 22 }
       ],
     },
     demands: {

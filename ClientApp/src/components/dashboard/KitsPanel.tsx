@@ -9,7 +9,7 @@ function KitsPanel({ kits }: { kits: DashboardOverview['kits'] }) {
     <Panel icon="tag" title="KITS" subtitle="Quantidade de cotações por kit" to="/sistema/kits-drc">
       <ul className="divide-y divide-line">
         {kits.ranking.map((kit) => (
-          <li key={kit.name} className="flex items-center gap-3 py-2.5">
+          <li key={kit.name} className="flex cursor-pointer items-center gap-3 py-2.5">
             <div className="flex-1">
               <p className="text-xs font-semibold text-ink">{kit.name}</p>
               <div className="mt-1.5 h-1.5 rounded-full bg-brand-100">

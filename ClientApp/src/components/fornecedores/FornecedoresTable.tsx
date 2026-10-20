@@ -2,6 +2,7 @@ import Icon, { type IconName } from '../common/Icon'
 import { formatDataCadastro, type Fornecedor } from '../../services/fornecedoresService'
 
 const ROW_ACTIONS: { icon: IconName; label: string }[] = [
+  { icon: 'eye', label: 'Visualizar' },
   { icon: 'pencil', label: 'Editar' },
   { icon: 'trash', label: 'Excluir' },
 ]
