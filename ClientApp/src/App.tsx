@@ -3,7 +3,12 @@ import ProtectedRoute from './auth/ProtectedRoute'
 import SistemaLayout from './layouts/SistemaLayout'
 import LoginPage from './pages/LoginPage'
 import InicioPage from './pages/sistema/InicioPage'
-import CotacoesPage from './pages/sistema/CotacoesPage'
+import CotacoesPage from './pages/sistema/cotacoes/CotacoesPage'
+import NovaCotacaoPage from './pages/sistema/cotacoes/NovaCotacaoPage'
+import AdicionarCotacoesEmLotePage from './pages/sistema/cotacoes/AdicionarCotacoesEmLotePage'
+import IntencaoCotacaoPage from './pages/sistema/cotacoes/IntencaoCotacaoPage'
+import VisualizarCotacaoPage from './pages/sistema/cotacoes/VisualizarCotacaoPage'
+import EditarCotacaoPage from './pages/sistema/cotacoes/EditarCotacaoPage'
 import FornecedoresPage from './pages/sistema/FornecedoresPage'
 import PlanilhasPage from './pages/sistema/PlanilhasPage'
 import KitsDrcPage from './pages/sistema/KitsDrcPage'
@@ -17,6 +22,11 @@ function App() {
           <Route index element={<InicioPage />} />
           <Route path="kits-drc" element={<KitsDrcPage />} />
           <Route path="cotacoes" element={<CotacoesPage />} />
+          <Route path="cotacoes/nova-cotacao" element={<NovaCotacaoPage />} />
+          <Route path="cotacoes/adicionar-em-lote" element={<AdicionarCotacoesEmLotePage />} />
+          <Route path="cotacoes/intencao-de-cotacao" element={<IntencaoCotacaoPage />} />
+          <Route path="cotacoes/visualizar-cotacao" element={<VisualizarCotacaoPage />} />
+          <Route path="cotacoes/editar-cotacao" element={<EditarCotacaoPage />} />
           <Route path="fornecedores" element={<FornecedoresPage />} />
           <Route path="planilhas" element={<PlanilhasPage />} />
         </Route>

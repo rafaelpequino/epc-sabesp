@@ -9,7 +9,11 @@ function PlanilhasPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <PageHeader title="Planilhas" actions={<Button icon="plus">Adicionar planilha</Button>}>
+      <PageHeader
+        title="Planilhas"
+        breadcrumbs={[{ label: 'Início', to: '/sistema' }, { label: 'Planilhas' }]}
+        actions={<Button icon="plus">Adicionar planilha</Button>}
+      >
         Banco de planilhas padrão por setor
       </PageHeader>
 

@@ -12,7 +12,10 @@ function KitsDrcPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <PageHeader title="Kits DRC">
+      <PageHeader
+        title="Kits DRC"
+        breadcrumbs={[{ label: 'Início', to: '/sistema' }, { label: 'Kits DRC' }]}
+      >
         Geração automatizada de orçamentos baseada no Banco de Preços da SABESP.
       </PageHeader>
 

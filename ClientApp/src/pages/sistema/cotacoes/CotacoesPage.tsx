@@ -1,22 +1,35 @@
 import { useMemo, useState, type FormEvent } from 'react'
-import Button from '../../components/common/Button'
-import Icon from '../../components/common/Icon'
-import CotacaoFilters from '../../components/cotacoes/CotacaoFilters'
-import CotacoesTable from '../../components/cotacoes/CotacoesTable'
-import PageHeader from '../../components/layout/PageHeader'
+import { useNavigate } from 'react-router-dom'
+import Button from '../../../components/common/Button'
+import ConfirmDialog from '../../../components/common/ConfirmDialog'
+import Icon from '../../../components/common/Icon'
+import CotacaoFilters from '../../../components/cotacoes/CotacaoFilters'
+import CotacoesTable from '../../../components/cotacoes/CotacoesTable'
+import PageHeader from '../../../components/layout/PageHeader'
 import {
+  COTACAO_DELETE_UNAVAILABLE_MESSAGE,
+  COTACAO_DELETE_WARNING,
   EMPTY_COTACAO_FILTERS,
   availableYears,
   filterCotacoes,
   getCotacoes,
   uniqueValues,
+  type Cotacao,
   type CotacaoFilters as Filters,
-} from '../../services/cotacoesService'
+} from '../../../services/cotacoesService'
 
 function CotacoesPage() {
+  const navigate = useNavigate()
   const cotacoes = useMemo(getCotacoes, [])
   const [draft, setDraft] = useState<Filters>(EMPTY_COTACAO_FILTERS)
   const [applied, setApplied] = useState<Filters>(EMPTY_COTACAO_FILTERS)
+  const [cotacaoToDelete, setCotacaoToDelete] = useState<Cotacao | null>(null)
+  const [deleteFeedback, setDeleteFeedback] = useState<string | null>(null)
+
+  function handleConfirmDelete() {
+    setCotacaoToDelete(null)
+    setDeleteFeedback(COTACAO_DELETE_UNAVAILABLE_MESSAGE)
+  }
 
   const responsaveis = useMemo(() => uniqueValues(cotacoes, 'responsavel'), [cotacoes])
   const fornecedores = useMemo(() => uniqueValues(cotacoes, 'fornecedor'), [cotacoes])
@@ -43,13 +56,19 @@ function CotacoesPage() {
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Cotações"
+        breadcrumbs={[
+          { label: 'Início', to: '/sistema' },
+          { label: 'Cotações' },
+        ]}
         actions={
           <>
-            <Button icon="plus">Nova Cotação</Button>
-            <Button variant="outline" icon="upload">
+            <Button icon="plus" onClick={() => navigate('/sistema/cotacoes/nova-cotacao')}>
+              Nova Cotação
+            </Button>
+            <Button variant="outline" icon="upload" onClick={() => navigate('/sistema/cotacoes/adicionar-em-lote')}>
               Adicionar em Lote
             </Button>
-            <Button variant="outline" icon="plus">
+            <Button variant="outline" icon="plus" onClick={() => navigate('/sistema/cotacoes/intencao-de-cotacao')}>
               Intenção de Cotação
             </Button>
           </>
@@ -109,11 +128,28 @@ function CotacoesPage() {
       </div>
 
       {visibleCotacoes.length > 0 ? (
-        <CotacoesTable cotacoes={visibleCotacoes} />
+        <CotacoesTable cotacoes={visibleCotacoes} onDelete={setCotacaoToDelete} />
       ) : (
         <p className="rounded-2xl border border-dashed border-line bg-white p-8 text-center text-sm text-ink-muted">
           Nenhuma cotação encontrada para os filtros selecionados.
         </p>
+      )}
+
+      {deleteFeedback && (
+        <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
+          {deleteFeedback}
+        </p>
+      )}
+
+      {cotacaoToDelete && (
+        <ConfirmDialog
+          title="Excluir cotação"
+          warning={COTACAO_DELETE_WARNING}
+          question={`Deseja realmente excluir a cotação "${cotacaoToDelete.item}"?`}
+          confirmLabel="Excluir"
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setCotacaoToDelete(null)}
+        />
       )}
     </div>
   )

@@ -1,4 +1,5 @@
-import Icon, { type IconName } from '../common/Icon'
+import { type IconName } from '../common/Icon'
+import IconButton from '../common/IconButton'
 import { formatDataCadastro, type Fornecedor } from '../../services/fornecedoresService'
 
 const ROW_ACTIONS: { icon: IconName; label: string }[] = [
@@ -36,15 +37,12 @@ function FornecedoresTable({ fornecedores }: { fornecedores: Fornecedor[] }) {
               <td className="px-4 py-3.5">
                 <div className="flex justify-end gap-1">
                   {ROW_ACTIONS.map((action) => (
-                    <button
+                    <IconButton
                       key={action.icon}
-                      type="button"
-                      aria-label={`${action.label} ${fornecedor.nomeFantasia}`}
+                      icon={action.icon}
+                      label={` ${fornecedor.nomeFantasia}`}
                       title={action.label}
-                      className="grid size-8 cursor-pointer place-items-center rounded-lg text-ink-muted transition-colors hover:bg-brand-100 hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                    >
-                      <Icon name={action.icon} className="size-4" />
-                    </button>
+                    />
                   ))}
                 </div>
               </td>

@@ -1,5 +1,6 @@
-﻿import Button from '../common/Button'
+import Button from '../common/Button'
 import Icon from '../common/Icon'
+import IconButton from '../common/IconButton'
 import { MONTH_LABELS } from '../../services/cotacoesService'
 import { type Planilha } from '../../services/planilhasService'
 
@@ -10,16 +11,7 @@ function formatIo(io: { month: number; year: number }): string {
 }
 
 function RowButton({ icon, label, size }: { icon: 'download' | 'trash'; label: string; size: string }) {
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      title={label.split(' ')[0]}
-      className={`grid ${size} shrink-0 cursor-pointer place-items-center rounded-lg text-ink-muted transition-colors hover:bg-brand-100 hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand`}
-    >
-      <Icon name={icon} className="size-4" />
-    </button>
-  )
+  return <IconButton icon={icon} label={label} title={label.split(' ')[0]} size={size} />
 }
 
 function PlanilhaCard({ planilha }: { planilha: Planilha }) {

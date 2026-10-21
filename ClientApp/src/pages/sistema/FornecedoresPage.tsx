@@ -24,7 +24,11 @@ function FornecedoresPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <PageHeader title="Fornecedores" actions={<Button icon="plus">Novo Fornecedor</Button>}>
+      <PageHeader
+        title="Fornecedores"
+        breadcrumbs={[{ label: 'Início', to: '/sistema' }, { label: 'Fornecedores' }]}
+        actions={<Button icon="plus">Novo Fornecedor</Button>}
+      >
         Banco de fornecedores - conectado com o banco de cotações especiais
       </PageHeader>
 

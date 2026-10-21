@@ -12,7 +12,7 @@ function InicioPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <PageHeader title="Visão geral" />
+      <PageHeader title="Visão geral" breadcrumbs={[{ label: 'Início' }]} />
 
       <OverviewCards data={data} />
 

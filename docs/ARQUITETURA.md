@@ -1,4 +1,4 @@
-﻿# Arquitetura
+# Arquitetura
 
 ## Objetivo
 
@@ -32,7 +32,7 @@ Entity Framework Core, outros ORMs e ferramentas de migrations de ORM não fazem
 - `ClientApp/src/services/`: futuras chamadas HTTP à API.
 - `ClientApp/src/styles/tailwind.css`: importação do Tailwind CSS e paleta de cores do projeto, registrada como tokens de tema (`@theme`). A estilização deve ser feita com classes utilitárias nos componentes, sem CSS de apresentação escrito à mão.
 
-  **Regra de uso das cores: o azul é sempre o foco.** Botões, links, item ativo do menu, ícones, barras, gráficos, cabeçalhos de cartão e demais elementos de destaque devem usar o azul (`brand` e seus tons). Amarelo, laranja e verde são **acentos**, reservados a detalhes pontuais (por exemplo, indicar status como "finalizada"/"em aberto" ou realçar um pequeno elemento). Eles nunca devem ser a cor predominante de um cartão, página, botão principal ou gráfico, nem competir com o azul. Não usar outras cores de matiz (roxo, rosa etc.) na interface; vermelho só para erros.
+  **Regra de uso das cores: o azul é sempre o foco.** Botões, links, item ativo do menu, ícones, barras, gráficos, cabeçalhos de cartão e demais elementos de destaque devem usar o azul (`brand` e seus tons). Amarelo, laranja e verde são **acentos**, reservados a detalhes pontuais (por exemplo, indicar status como "finalizada"/"em aberto" ou realçar um pequeno elemento). Eles nunca devem ser a cor predominante de um cartão, página, botão principal ou gráfico, nem competir com o azul. Não usar outras cores de matiz (roxo, rosa etc.) na interface. **Exceção por tipo de ação:** exclusão em vermelho, edição em amarelo e adição/demais ações em azul, valendo para botões, ícones de ação e o link "Sair" do menu (vermelho). Vermelho também sinaliza erros.
 
   | Token | Cor | Classes (exemplos) | Uso |
   | --- | --- | --- | --- |
@@ -42,7 +42,8 @@ Entity Framework Core, outros ORMs e ferramentas de migrations de ORM não fazem
   | `--color-brand-200` | `#A8DBF5` | `text-brand-200` | Ilustrações e detalhes suaves |
   | `--color-brand-600` | `#0079B5` | `hover:bg-brand-600`, `text-brand-600` | Hover de botões e links em texto pequeno (melhor contraste) |
   | `--color-brand-700` | `#00608F` | `text-brand-700` | Texto azul escuro (títulos e item ativo) |
-  | `--color-accent-yellow` | `#FEC513` | `bg-accent-yellow` | Acento: amarelo |
+  | `--color-accent-yellow` | `#FEC513` | `bg-accent-yellow` | Acento: amarelo (ações de edição) |
+   | `--color-accent-yellow-700` | `#A67C00` | `text-accent-yellow-700` | Amarelo escuro, para ícones/textos de edição |
   | `--color-accent-orange` | `#F9B181` | `bg-accent-orange` | Acento: laranja |
   | `--color-accent-green` | `#649A20` | `bg-accent-green`, `text-accent-green` | Acento: verde |
   | `--color-ink-muted` | `#5B6B86` | `text-ink-muted` | Cinza para textos secundários |
@@ -70,11 +71,16 @@ Enquanto não há backend nem banco, o login aceita `admin` / `admin` (`services
 - Itens do menu ficam em `components/layout/navigation.ts`. Use `locked: true` para indicar itens ainda não liberados: eles são exibidos com opacidade reduzida e cadeado, sem navegação. Atualmente, Mapeador IA, Nova Demanda, Fila de Aprovação e Peças de Aço estão bloqueados enquanto suas páginas não estão disponíveis.
 - `pages/sistema/InicioPage.tsx`: página inicial (Visão geral), montada com `components/dashboard/`. Os dados vêm de `services/dashboardService.ts`, atualmente fictícios.
 - `pages/sistema/KitsDrcPage.tsx` (`/sistema/kits-drc`): lista de kits de orçamentação paramétrica, com `components/kits/KitFilters.tsx` e `KitCard.tsx`. Os filtros são mutuamente exclusivos: ou **tipo de rede** (Água/Esgoto), ou **método construtivo** (VCA/MND); clicar no filtro ativo (ou em "Limpar filtro") o remove. A contagem de kits encontrados fica na página, entre os filtros e os cartões. Cada kit declara suas `tags` em `services/kitsService.ts` (dados fictícios), e o filtro mostra os kits que contêm a tag. Kits com `status: 'soon'` aparecem desabilitados ("Em breve"). Novos filtros entram em `KIT_FILTER_GROUPS`.
-- `components/layout/PageHeader.tsx`: título (e subtítulo opcional) padrão das páginas do sistema; aceita `actions` para botões ao lado do título.
+- `components/layout/PageHeader.tsx`: título (e subtítulo opcional) padrão das páginas do sistema; aceita `actions` para botões ao lado do título e `breadcrumbs` para caminho de navegação com links nas etapas anteriores.
 - `pages/sistema/FornecedoresPage.tsx` (`/sistema/fornecedores`): lista de fornecedores com busca por nome, CNPJ ou telefone (aplicada em "Buscar"/Enter; o "x" dentro do campo, exibido com busca aplicada, a remove). Usa `components/fornecedores/FornecedoresTable.tsx` e `services/fornecedoresService.ts` (dados fictícios e lógica de busca). Os botões "Novo Fornecedor", editar e excluir ainda não têm ação.
 - `pages/sistema/PlanilhasPage.tsx` (`/sistema/planilhas`): um cartão por planilha padrão de setor (`components/planilhas/PlanilhaCard.tsx`), com a tabela de versões disponíveis (I0, responsável e download). Os dados vêm de `services/planilhasService.ts` (fictícios). "Adicionar versão" e o download ainda não têm ação.
-- `pages/sistema/CotacoesPage.tsx` (`/sistema/cotacoes`): lista de cotações especiais com busca por item e filtros (setor em chips; responsável, fornecedor e período de IO em selects), aplicados ao clicar em "Buscar"/Enter. Usa `components/cotacoes/` (`CotacaoFilters`, `CotacoesTable`) e `services/cotacoesService.ts` (dados fictícios e lógica de filtro).
-- **Botões:** use sempre `components/common/Button.tsx` (variantes `primary` e `outline`, ambas em azul); selects usam `components/common/SelectField.tsx`.
+- `pages/sistema/cotacoes/CotacoesPage.tsx` (`/sistema/cotacoes`): lista de cotações especiais com busca por item e filtros (setor em chips; responsável, fornecedor e período de IO em selects), aplicados ao clicar em "Buscar"/Enter. Usa `components/cotacoes/` (`CotacaoFilters`, `CotacoesTable`) e `services/cotacoesService.ts` (dados fictícios e lógica de filtro).
+- `pages/sistema/cotacoes/NovaCotacaoPage.tsx` (`/sistema/cotacoes/nova-cotacao`) e `pages/sistema/cotacoes/EditarCotacaoPage.tsx` (`/sistema/cotacoes/editar-cotacao`): compartilham o formulário `components/cotacoes/CotacaoFormPage.tsx`, com campos de preços, até seis empresas, justificativa e anexos PDF (máximo de 10 MB por arquivo, com descrição obrigatória). A edição abre preenchida com os dados de `getCotacaoDetalhe` (convertidos por `cotacaoFormValues.ts`); o id não vai na URL: trafega no estado da navegação (`location.state`, ver `components/cotacoes/cotacoesPaths.ts`), então o acesso direto à URL redireciona para `/sistema/cotacoes` (o F5 mantém o estado). O caminho (breadcrumbs) e o "Cancelar" seguem a origem do usuário: aberta pelo botão "Editar" da visualização, mostra "Início > Cotações > Visualizar cotação #001 > Editar cotação" e cancela de volta para a visualização; aberta pela lista (ou por link direto), mostra "Início > Cotações > Editar cotação" e cancela para a lista. A colagem da planilha espera uma linha tabulada na ordem dos campos do formulário. A gravação ainda não está conectada à API e informa essa limitação ao usuário.
+- `pages/sistema/cotacoes/AdicionarCotacoesEmLotePage.tsx` (`/sistema/cotacoes/adicionar-em-lote`): página de importação em massa de cotações, aberta por "Adicionar em Lote". Por enquanto contém apenas o botão "Colar do Excel", ainda sem ação.
+- `pages/sistema/cotacoes/IntencaoCotacaoPage.tsx` (`/sistema/cotacoes/intencao-de-cotacao`): registro de cotação pendente, com apenas Setor e Descrição do item (máx. 100 caracteres) obrigatórios. O registro ainda não está conectado à API e informa essa limitação ao usuário.
+- `pages/sistema/cotacoes/VisualizarCotacaoPage.tsx` (`/sistema/cotacoes/visualizar-cotacao`): leitura dos dados de uma cotação, aberta pelo ícone de olho da tabela. Tem cabeçalho em destaque (gradiente azul), indicadores de preço, preços das empresas, justificativa e lista de anexos (descrição, botão Visualizar e botão Baixar por anexo), além dos botões Voltar e Editar. O título usa um código temporário (`#001`). Os dados vêm de `getCotacaoDetalhe` (fictício/temporário).
+- **Confirmações:** ações destrutivas (salvar edição de cotação e excluir cotação) usam `components/common/ConfirmDialog.tsx`, um diálogo `alertdialog` com aviso em vermelho. A exclusão ainda não está conectada à API e informa essa limitação ao usuário.
+- **Botões:** use sempre `components/common/Button.tsx` (variantes `primary` e `outline` em azul, `warning` em amarelo para editar e `danger` em vermelho para excluir). Ícones de ação em tabelas e listas usam `components/common/IconButton.tsx`, que aplica a cor pelo ícone (`trash` vermelho, `pencil` amarelo, demais azul). Selects usam `components/common/SelectField.tsx`.
 - Ícones SVG em `components/common/Icon.tsx`.
 
 ## Comunicação e acesso a dados

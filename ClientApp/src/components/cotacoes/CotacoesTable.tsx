@@ -1,18 +1,18 @@
+import { useNavigate } from 'react-router-dom'
 import Icon, { type IconName } from '../common/Icon'
+import IconButton from '../common/IconButton'
+import { formatIo, formatPrice, type Cotacao } from '../../services/cotacoesService'
+import CotacaoStatusBadge from './CotacaoStatusBadge'
 import {
-  COTACAO_STATUS_LABELS,
-  MONTH_LABELS,
-  type Cotacao,
-  type CotacaoStatus,
-} from '../../services/cotacoesService'
+  EDITAR_COTACAO_PATH,
+  VISUALIZAR_COTACAO_PATH,
+  type EditarCotacaoState,
+  type VisualizarCotacaoState,
+} from './cotacoesPaths'
 
-const STATUS_STYLES: Record<CotacaoStatus, { icon: IconName; className: string }> = {
-  pendente: { icon: 'clock', className: 'bg-accent-yellow/20 text-ink' },
-  cancelada: { icon: 'close', className: 'bg-red-50 text-red-600' },
-  concluida: { icon: 'check', className: 'bg-accent-green/15 text-accent-green' },
-}
+type RowAction = { icon: IconName; label: string }
 
-const ROW_ACTIONS: { icon: IconName; label: string }[] = [
+const ROW_ACTIONS: RowAction[] = [
   { icon: 'copy', label: 'Duplicar' },
   { icon: 'eye', label: 'Visualizar' },
   { icon: 'pencil', label: 'Editar' },
@@ -21,27 +21,20 @@ const ROW_ACTIONS: { icon: IconName; label: string }[] = [
 
 const HEADERS = ['I0 original', 'Setor', 'Item', 'Preço de Forn. Adotado', 'Responsável', 'Status']
 
-function formatIo(io: Cotacao['io']): string {
-  if (!io) return '-'
-  return `${MONTH_LABELS[io.month - 1].toUpperCase()}/${String(io.year).slice(-2)}`
+type CotacoesTableProps = {
+  cotacoes: Cotacao[]
+  onDelete: (cotacao: Cotacao) => void
 }
 
-function formatPrice(value: number): string {
-  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-}
+function CotacoesTable({ cotacoes, onDelete }: CotacoesTableProps) {
+  const navigate = useNavigate()
 
-function StatusBadge({ status }: { status: CotacaoStatus }) {
-  const { icon, className } = STATUS_STYLES[status]
+  function handleAction(action: RowAction, cotacao: Cotacao) {
+    if (action.icon === 'trash') onDelete(cotacao)
+    if (action.icon === 'eye') navigate(VISUALIZAR_COTACAO_PATH, { state: { id: cotacao.id } satisfies VisualizarCotacaoState })
+    if (action.icon === 'pencil') navigate(EDITAR_COTACAO_PATH, { state: { id: cotacao.id } satisfies EditarCotacaoState })
+  }
 
-  return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-bold ${className}`}>
-      <Icon name={icon} className="size-3.5" />
-      {COTACAO_STATUS_LABELS[status]}
-    </span>
-  )
-}
-
-function CotacoesTable({ cotacoes }: { cotacoes: Cotacao[] }) {
   return (
     <div className="overflow-x-auto rounded-2xl border border-line bg-white shadow-sm">
       <table className="w-full min-w-[56rem] border-collapse text-left text-sm">
@@ -70,21 +63,19 @@ function CotacoesTable({ cotacoes }: { cotacoes: Cotacao[] }) {
               <td className="px-4 py-3.5">{formatPrice(cotacao.preco)}</td>
               <td className="px-4 py-3.5">{cotacao.responsavel}</td>
               <td className="px-4 py-3.5">
-                <StatusBadge status={cotacao.status} />
+                <CotacaoStatusBadge status={cotacao.status} />
               </td>
               <td className="px-4 py-3.5 text-ink-muted">{cotacao.propostas}</td>
               <td className="px-4 py-3.5">
                 <div className="flex justify-end gap-1">
                   {ROW_ACTIONS.map((action) => (
-                    <button
+                    <IconButton
                       key={action.icon}
-                      type="button"
-                      aria-label={`${action.label} ${cotacao.item}`}
+                      icon={action.icon}
+                      label={` ${cotacao.item}`}
                       title={action.label}
-                      className="grid size-8 cursor-pointer place-items-center rounded-lg text-ink-muted transition-colors hover:bg-brand-100 hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                    >
-                      <Icon name={action.icon} className="size-4" />
-                    </button>
+                      onClick={() => handleAction(action, cotacao)}
+                    />
                   ))}
                 </div>
               </td>
