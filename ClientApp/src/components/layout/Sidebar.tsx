@@ -26,23 +26,37 @@ function Sidebar({ id, isOpen }: SidebarProps) {
                 {section.title}
               </h2>
             )}
-            {section.items.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-[15px] font-semibold transition-colors ${
-                    isActive
-                      ? 'bg-brand-100 text-brand-700'
-                      : 'text-ink-muted hover:bg-brand-50 hover:text-ink'
-                  }`
-                }
-              >
-                <Icon name={item.icon} />
-                {item.label}
-              </NavLink>
-            ))}
+            {section.items.map((item) =>
+              item.locked ? (
+                <span
+                  key={item.to}
+                  aria-disabled="true"
+                  aria-label={`${item.label} — não disponível`}
+                  title="Link não disponível"
+                  className="flex cursor-not-allowed items-center gap-3 rounded-lg px-3.5 py-2.5 text-[15px] font-semibold text-ink-muted opacity-50"
+                >
+                  <Icon name={item.icon} />
+                  {item.label}
+                  <Icon name="lock" className="ml-auto size-4" />
+                </span>
+              ) : (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.end}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-[15px] font-semibold transition-colors ${
+                      isActive
+                        ? 'bg-brand-100 text-brand-700'
+                        : 'text-ink-muted hover:bg-brand-50 hover:text-ink'
+                    }`
+                  }
+                >
+                  <Icon name={item.icon} />
+                  {item.label}
+                </NavLink>
+              ),
+            )}
           </div>
         ))}
       </nav>
