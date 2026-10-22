@@ -1,4 +1,5 @@
 ﻿import FilterPanel from '../common/FilterPanel'
+import FilterChip from '../common/FilterChip'
 import SelectField from '../common/SelectField'
 import {
   MONTH_LABELS,
@@ -81,19 +82,12 @@ function CotacaoFilters({ filters, responsaveis, fornecedores, years, onChange, 
               const isActive = filters.setor === setor
 
               return (
-                <button
+                <FilterChip
                   key={setor}
-                  type="button"
-                  aria-pressed={isActive}
+                  label={setor}
+                  isActive={isActive}
                   onClick={() => onChange({ setor: isActive ? null : setor })}
-                  className={`inline-flex min-h-10 cursor-pointer items-center rounded-full border px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
-                    isActive
-                      ? 'border-brand bg-brand text-white'
-                      : 'border-line bg-white text-ink hover:border-brand hover:bg-brand-50'
-                  }`}
-                >
-                  {setor}
-                </button>
+                />
               )
             })}
           </div>

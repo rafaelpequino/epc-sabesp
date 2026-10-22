@@ -1,14 +1,14 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../../components/common/Button'
+import Field from '../../../components/common/Field'
+import { FIELD_CLASSES } from '../../../components/common/fieldClasses'
+import TextInput from '../../../components/common/TextInput'
 import PageHeader from '../../../components/layout/PageHeader'
 import { SETORES } from '../../../services/cotacoesService'
 
 const MAX_DESCRIPTION_LENGTH = 100
 const FORM_ID = 'intencao-cotacao-form'
-
-const FIELD_CLASSES =
-  'h-11 w-full rounded-lg border border-line bg-white px-3.5 text-sm text-ink outline-none transition-[border-color,box-shadow] placeholder:text-ink-muted focus:border-brand focus:ring-4 focus:ring-brand-100'
 
 function IntencaoCotacaoPage() {
   const navigate = useNavigate()
@@ -53,10 +53,7 @@ function IntencaoCotacaoPage() {
           <span className="rounded-full bg-accent-yellow/20 px-2 py-0.5 text-xs font-bold text-ink">Pendente</span>.
         </p>
 
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="intention-sector" className="text-sm font-semibold text-ink">
-            Setor *
-          </label>
+        <Field id="intention-sector" label="Setor *">
           <select
             id="intention-sector"
             required
@@ -71,23 +68,22 @@ function IntencaoCotacaoPage() {
               </option>
             ))}
           </select>
-        </div>
+        </Field>
 
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="intention-description" className="text-sm font-semibold text-ink">
-            Descrição do item *
-            <span className="ml-1 font-normal text-ink-muted">(máx. {MAX_DESCRIPTION_LENGTH} caracteres)</span>
-          </label>
-          <input
+        <Field
+          id="intention-description"
+          label="Descrição do item *"
+          hint={`(máx. ${MAX_DESCRIPTION_LENGTH} caracteres)`}
+        >
+          <TextInput
             id="intention-description"
             required
             maxLength={MAX_DESCRIPTION_LENGTH}
             value={description}
-            onChange={(event) => setDescription(event.target.value)}
+            onChange={setDescription}
             placeholder="Descrição do item"
-            className={FIELD_CLASSES}
           />
-        </div>
+        </Field>
 
         {feedback && (
           <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">

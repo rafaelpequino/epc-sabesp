@@ -2,7 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../../components/common/Button'
 import ConfirmDialog from '../../../components/common/ConfirmDialog'
-import Icon from '../../../components/common/Icon'
+import SearchBar from '../../../components/common/SearchBar'
 import CotacaoFilters from '../../../components/cotacoes/CotacaoFilters'
 import CotacoesTable from '../../../components/cotacoes/CotacoesTable'
 import PageHeader from '../../../components/layout/PageHeader'
@@ -78,33 +78,14 @@ function CotacoesPage() {
       </PageHeader>
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <section className="flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-white p-3 shadow-sm">
-          <label className="relative min-w-56 flex-1">
-            <span className="sr-only">Pesquisar por item</span>
-            <Icon name="search" className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-ink-muted" />
-            <input
-              type="search"
-              value={draft.search}
-              onChange={(event) => setDraft({ ...draft, search: event.target.value })}
-              placeholder="Pesquisar por item…"
-              className="h-11 w-full rounded-lg border border-line bg-white pl-10 pr-11 text-sm text-ink outline-none transition-[border-color,box-shadow] placeholder:text-ink-muted focus:border-brand focus:ring-4 focus:ring-brand-100 [&::-webkit-search-cancel-button]:appearance-none"
-            />
-            {applied.search && (
-              <button
-                type="button"
-                onClick={handleClearSearch}
-                aria-label="Limpar busca"
-                title="Limpar busca"
-                className="absolute right-2 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-lg bg-brand-50 text-brand-700 transition-colors hover:bg-brand-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-              >
-                <Icon name="close" className="size-4" />
-              </button>
-            )}
-          </label>
-          <Button type="submit" icon="search">
-            Buscar
-          </Button>
-        </section>
+        <SearchBar
+          value={draft.search}
+          onChange={(search) => setDraft({ ...draft, search })}
+          placeholder="Pesquisar por item…"
+          label="Pesquisar por item"
+          showClear={applied.search !== ''}
+          onClear={handleClearSearch}
+        />
 
         <CotacaoFilters
           filters={draft}

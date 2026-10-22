@@ -11,7 +11,7 @@ import {
   type VisualizarCotacaoState,
 } from '../../../components/cotacoes/cotacoesPaths'
 import PageHeader, { type BreadcrumbItem } from '../../../components/layout/PageHeader'
-import { COTACAO_EDIT_WARNING, getCotacaoDetalhe } from '../../../services/cotacoesService'
+import { COTACAO_EDIT_WARNING, formatQuoteCode, getCotacaoDetalhe } from '../../../services/cotacoesService'
 
 function EditarCotacaoPage() {
   const navigate = useNavigate()
@@ -45,7 +45,7 @@ function EditarCotacaoPage() {
     )
   }
 
-  const code = cotacao.id.padStart(3, '0')
+  const code = formatQuoteCode(cotacao.id)
   const cameFromVisualizar = navigationState.fromVisualizar === true
   const visualizarState: VisualizarCotacaoState = { id: cotacao.id }
   const breadcrumbs: BreadcrumbItem[] = [

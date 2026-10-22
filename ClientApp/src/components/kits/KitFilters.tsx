@@ -1,3 +1,4 @@
+import FilterChip from '../common/FilterChip'
 import FilterPanel from '../common/FilterPanel'
 import { KIT_FILTER_GROUPS, type KitFilterGroup, type KitFilterId } from '../../services/kitsService'
 
@@ -25,19 +26,12 @@ function FilterChips({ group, activeFilter, onChange }: FilterChipsProps) {
           const isActive = activeFilter === option.id
 
           return (
-            <button
+            <FilterChip
               key={option.id}
-              type="button"
-              aria-pressed={isActive}
+              label={option.label}
+              isActive={isActive}
               onClick={() => onChange(isActive ? null : option.id)}
-              className={`inline-flex min-h-10 cursor-pointer items-center rounded-full border px-4 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
-                isActive
-                  ? 'border-brand bg-brand text-white'
-                  : 'border-line bg-white text-ink hover:border-brand hover:bg-brand-50'
-              }`}
-            >
-              {option.label}
-            </button>
+            />
           )
         })}
       </div>

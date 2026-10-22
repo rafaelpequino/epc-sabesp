@@ -16,6 +16,7 @@ import {
   COTACAO_DELETE_WARNING,
   formatIo,
   formatPrice,
+  formatQuoteCode,
   getCotacaoDetalhe,
   type CotacaoAnexo,
   type CotacaoDetalhe,
@@ -29,11 +30,6 @@ const ATTACHMENT_LINK_CLASSES =
 
 function formatOptionalPrice(value: number | null): string {
   return value === null ? EMPTY_VALUE : formatPrice(value)
-}
-
-// TEMPORÁRIO: o código definitivo da cotação ainda será definido; por ora usa o id com zeros à esquerda.
-function formatQuoteCode(id: string): string {
-  return id.padStart(3, '0')
 }
 
 function formatFileSize(bytes: number): string {

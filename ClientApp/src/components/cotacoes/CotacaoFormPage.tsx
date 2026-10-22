@@ -1,9 +1,12 @@
-import { useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react'
-import Button from '../../components/common/Button'
-import ConfirmDialog from '../../components/common/ConfirmDialog'
-import Icon from '../../components/common/Icon'
-import IconButton from '../../components/common/IconButton'
-import PageHeader, { type BreadcrumbItem } from '../../components/layout/PageHeader'
+import { useState, type ChangeEvent, type FormEvent } from 'react'
+import Button from '../common/Button'
+import ConfirmDialog from '../common/ConfirmDialog'
+import Field from '../common/Field'
+import { FIELD_CLASSES, TEXTAREA_CLASSES } from '../common/fieldClasses'
+import Icon from '../common/Icon'
+import IconButton from '../common/IconButton'
+import TextInput from '../common/TextInput'
+import PageHeader, { type BreadcrumbItem } from '../layout/PageHeader'
 import { SETORES, type CotacaoWarning } from '../../services/cotacoesService'
 import { getFornecedores } from '../../services/fornecedoresService'
 import {
@@ -17,13 +20,6 @@ import {
 
 const MAX_ITEM_LENGTH = 100
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
-
-
-const FIELD_CLASSES =
-  'h-11 w-full rounded-lg border border-line bg-white px-3.5 text-sm text-ink outline-none transition-[border-color,box-shadow] placeholder:text-ink-muted focus:border-brand focus:ring-4 focus:ring-brand-100'
-
-const TEXTAREA_CLASSES =
-  'w-full rounded-lg border border-line bg-white px-3.5 py-3 text-sm text-ink outline-none transition-[border-color,box-shadow] placeholder:text-ink-muted focus:border-brand focus:ring-4 focus:ring-brand-100'
 
 const SPREADSHEET_FIELD_ORDER: (keyof QuoteFields)[] = [
   'sector',
@@ -39,59 +35,6 @@ const SPREADSHEET_FIELD_ORDER: (keyof QuoteFields)[] = [
   'arithmeticMean',
   'median',
 ]
-
-function FormField({
-  id,
-  label,
-  children,
-  hint,
-}: {
-  id: string
-  label: string
-  children: ReactNode
-  hint?: ReactNode
-}) {
-  return (
-    <div className="flex min-w-0 flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm font-semibold text-ink">
-        {label}
-        {hint && <span className="ml-1 font-normal text-ink-muted">{hint}</span>}
-      </label>
-      {children}
-    </div>
-  )
-}
-
-function TextInput({
-  id,
-  value,
-  onChange,
-  placeholder,
-  required = false,
-  maxLength,
-  inputMode,
-}: {
-  id: string
-  value: string
-  onChange: (value: string) => void
-  placeholder: string
-  required?: boolean
-  maxLength?: number
-  inputMode?: 'decimal' | 'text'
-}) {
-  return (
-    <input
-      id={id}
-      value={value}
-      onChange={(event) => onChange(event.target.value)}
-      placeholder={placeholder}
-      required={required}
-      maxLength={maxLength}
-      inputMode={inputMode}
-      className={FIELD_CLASSES}
-    />
-  )
-}
 
 type CotacaoFormPageProps = {
   title: string
@@ -258,7 +201,7 @@ function CotacaoFormPage({
               </p>
             </div>
           )}
-          <FormField id="sector" label="Setor *">
+          <Field id="sector" label="Setor *">
             <select
               id="sector"
               required
@@ -273,7 +216,7 @@ function CotacaoFormPage({
                 </option>
               ))}
             </select>
-          </FormField>
+          </Field>
 
           <div className="rounded-xl border border-dashed border-brand-200 bg-brand-50 p-3">
             <div className="[&>button]:w-full">
@@ -286,7 +229,7 @@ function CotacaoFormPage({
             </p>
           </div>
 
-          <FormField id="item" label="Item *" hint={`(máx. ${MAX_ITEM_LENGTH} caracteres)`}>
+          <Field id="item" label="Item *" hint={`(máx. ${MAX_ITEM_LENGTH} caracteres)`}>
             <TextInput
               id="item"
               value={fields.item}
@@ -295,10 +238,10 @@ function CotacaoFormPage({
               required
               maxLength={MAX_ITEM_LENGTH}
             />
-          </FormField>
+          </Field>
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <FormField id="originalIo" label="I0 original da cotação *">
+            <Field id="originalIo" label="I0 original da cotação *">
               <TextInput
                 id="originalIo"
                 value={fields.originalIo}
@@ -306,8 +249,8 @@ function CotacaoFormPage({
                 placeholder="Ex.: JAN/00"
                 required
               />
-            </FormField>
-            <FormField id="unit" label="Unidade *">
+            </Field>
+            <Field id="unit" label="Unidade *">
               <TextInput
                 id="unit"
                 value={fields.unit}
@@ -315,8 +258,8 @@ function CotacaoFormPage({
                 placeholder="Ex.: Un., m², kg"
                 required
               />
-            </FormField>
-            <FormField id="correctedSupplierPrice" label="Adotada — preço de forn. (corrigido) *">
+            </Field>
+            <Field id="correctedSupplierPrice" label="Adotada — preço de forn. (corrigido) *">
               <TextInput
                 id="correctedSupplierPrice"
                 value={fields.correctedSupplierPrice}
@@ -325,8 +268,8 @@ function CotacaoFormPage({
                 required
                 inputMode="decimal"
               />
-            </FormField>
-            <FormField id="installationPrice" label="Preço de montagem / instalação">
+            </Field>
+            <Field id="installationPrice" label="Preço de montagem / instalação">
               <TextInput
                 id="installationPrice"
                 value={fields.installationPrice}
@@ -334,8 +277,8 @@ function CotacaoFormPage({
                 placeholder="0,00"
                 inputMode="decimal"
               />
-            </FormField>
-            <FormField id="adoptedSupplierPrice" label="Preço de forn. adotado *">
+            </Field>
+            <Field id="adoptedSupplierPrice" label="Preço de forn. adotado *">
               <TextInput
                 id="adoptedSupplierPrice"
                 value={fields.adoptedSupplierPrice}
@@ -344,8 +287,8 @@ function CotacaoFormPage({
                 required
                 inputMode="decimal"
               />
-            </FormField>
-            <FormField id="adoptedAverage" label="Média adotada">
+            </Field>
+            <Field id="adoptedAverage" label="Média adotada">
               <TextInput
                 id="adoptedAverage"
                 value={fields.adoptedAverage}
@@ -353,8 +296,8 @@ function CotacaoFormPage({
                 placeholder="Digite aqui"
                 inputMode="decimal"
               />
-            </FormField>
-            <FormField id="cleanedAverage" label="Média saneada">
+            </Field>
+            <Field id="cleanedAverage" label="Média saneada">
               <TextInput
                 id="cleanedAverage"
                 value={fields.cleanedAverage}
@@ -362,8 +305,8 @@ function CotacaoFormPage({
                 placeholder="0,00"
                 inputMode="decimal"
               />
-            </FormField>
-            <FormField id="lowestPrice" label="Menor valor">
+            </Field>
+            <Field id="lowestPrice" label="Menor valor">
               <TextInput
                 id="lowestPrice"
                 value={fields.lowestPrice}
@@ -371,8 +314,8 @@ function CotacaoFormPage({
                 placeholder="0,00"
                 inputMode="decimal"
               />
-            </FormField>
-            <FormField id="arithmeticMean" label="Média aritmética">
+            </Field>
+            <Field id="arithmeticMean" label="Média aritmética">
               <TextInput
                 id="arithmeticMean"
                 value={fields.arithmeticMean}
@@ -380,8 +323,8 @@ function CotacaoFormPage({
                 placeholder="0,00"
                 inputMode="decimal"
               />
-            </FormField>
-            <FormField id="median" label="Mediana">
+            </Field>
+            <Field id="median" label="Mediana">
               <TextInput
                 id="median"
                 value={fields.median}
@@ -389,7 +332,7 @@ function CotacaoFormPage({
                 placeholder="0,00"
                 inputMode="decimal"
               />
-            </FormField>
+            </Field>
           </div>
         </section>
 
@@ -409,7 +352,7 @@ function CotacaoFormPage({
                 key={index}
                 className="grid gap-3 rounded-xl border border-line bg-brand-50/50 p-4 sm:grid-cols-2"
               >
-                <FormField id={`supplier-${index}`} label={`Nome da empresa ${index + 1}${index === 0 ? ' *' : ''}`}>
+                <Field id={`supplier-${index}`} label={`Nome da empresa ${index + 1}${index === 0 ? ' *' : ''}`}>
                   <div className="relative">
                     <Icon
                       name="search"
@@ -425,8 +368,8 @@ function CotacaoFormPage({
                       className={`${FIELD_CLASSES} pl-10`}
                     />
                   </div>
-                </FormField>
-                <FormField id={`supplier-price-${index}`} label={`Valor empresa ${index + 1}`}>
+                </Field>
+                <Field id={`supplier-price-${index}`} label={`Valor empresa ${index + 1}`}>
                   <TextInput
                     id={`supplier-price-${index}`}
                     value={supplier.price}
@@ -434,14 +377,14 @@ function CotacaoFormPage({
                     placeholder="0,00"
                     inputMode="decimal"
                   />
-                </FormField>
+                </Field>
               </div>
             ))}
           </div>
         </section>
 
         <section className="flex flex-col gap-5 rounded-2xl border border-line bg-white p-4 shadow-sm sm:p-5">
-          <FormField id="justification" label="Justificativa do preço adotado">
+          <Field id="justification" label="Justificativa do preço adotado">
             <textarea
               id="justification"
               value={fields.justification}
@@ -450,7 +393,7 @@ function CotacaoFormPage({
               rows={4}
               className={TEXTAREA_CLASSES}
             />
-          </FormField>
+          </Field>
 
           <div>
             <div className="mb-3 border-b border-line pb-3">
@@ -484,7 +427,7 @@ function CotacaoFormPage({
                         {(attachment.sizeBytes / (1024 * 1024)).toFixed(2)} MB
                       </p>
                     </div>
-                    <FormField id={`attachment-description-${attachment.id}`} label="Descrição do arquivo *">
+                    <Field id={`attachment-description-${attachment.id}`} label="Descrição do arquivo *">
                       <input
                         id={`attachment-description-${attachment.id}`}
                         value={attachment.description}
@@ -499,7 +442,7 @@ function CotacaoFormPage({
                         required
                         className={FIELD_CLASSES}
                       />
-                    </FormField>
+                    </Field>
                     <IconButton
                       icon="trash"
                       label={`Remover ${attachment.name}`}
