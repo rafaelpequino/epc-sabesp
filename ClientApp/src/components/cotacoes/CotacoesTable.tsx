@@ -13,7 +13,7 @@ import {
 type RowAction = { icon: IconName; label: string }
 
 const ROW_ACTIONS: RowAction[] = [
-  { icon: 'copy', label: 'Duplicar' },
+  { icon: 'copy', label: 'Copiar' },
   { icon: 'eye', label: 'Visualizar' },
   { icon: 'pencil', label: 'Editar' },
   { icon: 'trash', label: 'Excluir' },

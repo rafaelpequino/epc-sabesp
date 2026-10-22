@@ -47,9 +47,8 @@ function CotacoesPage() {
   }
 
   function handleClear() {
-    const cleared = { ...EMPTY_COTACAO_FILTERS, search: draft.search }
-    setDraft(cleared)
-    setApplied(cleared)
+    setDraft({ ...EMPTY_COTACAO_FILTERS, search: draft.search })
+    setApplied({ ...EMPTY_COTACAO_FILTERS, search: applied.search })
   }
 
   return (
@@ -92,7 +91,10 @@ function CotacoesPage() {
           responsaveis={responsaveis}
           fornecedores={fornecedores}
           years={years}
-          onChange={(changes) => setDraft({ ...draft, ...changes })}
+          onChange={(changes) => {
+            setDraft({ ...draft, ...changes })
+            setApplied({ ...applied, ...changes })
+          }}
           onClear={handleClear}
         />
       </form>
