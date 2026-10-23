@@ -25,7 +25,7 @@ function SistemaLayout() {
   }, [isMenuOpen])
 
   return (
-    <div className="flex h-dvh flex-col bg-page">
+    <div className="fixed inset-0 flex flex-col bg-page">
       <Header
         isMenuOpen={isMenuOpen}
         onMenuToggle={() => setIsMenuOpen((open) => !open)}

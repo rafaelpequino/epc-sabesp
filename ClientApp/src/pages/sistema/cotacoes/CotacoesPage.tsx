@@ -76,6 +76,12 @@ function CotacoesPage() {
         Banco de cotações especiais (não presentes no Banco de Preços da SABESP)
       </PageHeader>
 
+      {deleteFeedback && (
+        <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
+          {deleteFeedback}
+        </p>
+      )}
+
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <SearchBar
           value={draft.search}
@@ -115,12 +121,6 @@ function CotacoesPage() {
       ) : (
         <p className="rounded-2xl border border-dashed border-line bg-white p-8 text-center text-sm text-ink-muted">
           Nenhuma cotação encontrada para os filtros selecionados.
-        </p>
-      )}
-
-      {deleteFeedback && (
-        <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
-          {deleteFeedback}
         </p>
       )}
 

@@ -7,7 +7,8 @@ import Icon from '../common/Icon'
 import IconButton from '../common/IconButton'
 import TextInput from '../common/TextInput'
 import PageHeader, { type BreadcrumbItem } from '../layout/PageHeader'
-import { SETORES, type CotacaoWarning } from '../../services/cotacoesService'
+import { SETORES, type CotacaoStatus, type CotacaoWarning } from '../../services/cotacoesService'
+import CotacaoStatusBadge from './CotacaoStatusBadge'
 import { getFornecedores } from '../../services/fornecedoresService'
 import {
   EMPTY_COTACAO_FORM_VALUES,
@@ -17,24 +18,15 @@ import {
   type QuoteFields,
   type SupplierQuote,
 } from './cotacaoFormValues'
+import { parseCotacaoClipboard } from './colarExcel'
 
 const MAX_ITEM_LENGTH = 100
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
 
-const SPREADSHEET_FIELD_ORDER: (keyof QuoteFields)[] = [
-  'sector',
-  'item',
-  'originalIo',
-  'unit',
-  'correctedSupplierPrice',
-  'installationPrice',
-  'adoptedSupplierPrice',
-  'adoptedAverage',
-  'cleanedAverage',
-  'lowestPrice',
-  'arithmeticMean',
-  'median',
-]
+// O formulário usa vírgula decimal; o parser devolve números com ponto.
+function toInputNumber(value: string): string {
+  return value.replace('.', ',')
+}
 
 type CotacaoFormPageProps = {
   title: string
@@ -43,6 +35,8 @@ type CotacaoFormPageProps = {
   formId: string
   initialValues?: CotacaoFormValues
   warning?: CotacaoWarning
+  enableSpreadsheetPaste?: boolean
+  status?: CotacaoStatus
 }
 
 function CotacaoFormPage({
@@ -52,6 +46,8 @@ function CotacaoFormPage({
   formId,
   initialValues = EMPTY_COTACAO_FORM_VALUES,
   warning,
+  enableSpreadsheetPaste = false,
+  status,
 }: CotacaoFormPageProps) {
   const [fields, setFields] = useState(initialValues.fields)
   const [suppliers, setSuppliers] = useState(initialValues.suppliers)
@@ -82,32 +78,38 @@ function CotacaoFormPage({
 
     try {
       const clipboardText = await navigator.clipboard.readText()
-      const row = clipboardText.trimEnd().split(/\r?\n/, 1)[0]
-      const columns = row?.split('\t')
-
-      if (!columns || columns.length < 2 || !columns.some((column) => column.trim())) {
+      let pasted
+      try {
+        pasted = parseCotacaoClipboard(clipboardText)
+      } catch (parseError) {
         setFeedback({
-          message: 'Copie uma linha da planilha antes de colar os dados.',
+          message: parseError instanceof Error ? parseError.message : 'Formato inválido.',
           isError: true,
         })
         return
       }
 
-      setFields((current) => {
-        const pastedFields = { ...current }
-        SPREADSHEET_FIELD_ORDER.forEach((field, index) => {
-          if (columns[index] !== undefined) {
-            pastedFields[field] = columns[index].trim()
-          }
-        })
-        return pastedFields
-      })
-
-      const supplierValues = EMPTY_SUPPLIERS.map((supplier, index) => ({
-        name: columns[SPREADSHEET_FIELD_ORDER.length + index * 2]?.trim() ?? supplier.name,
-        price: columns[SPREADSHEET_FIELD_ORDER.length + index * 2 + 1]?.trim() ?? supplier.price,
+      setFields((current) => ({
+        ...current,
+        originalIo: pasted.idOriginal,
+        item: pasted.item,
+        unit: pasted.unidade,
+        correctedSupplierPrice: toInputNumber(pasted.precoFornCorrigido),
+        installationPrice: toInputNumber(pasted.precoMontagem),
+        adoptedSupplierPrice: toInputNumber(pasted.precoAdotado),
+        adoptedAverage: pasted.mediaAdotada,
+        cleanedAverage: toInputNumber(pasted.mediaSaneada),
+        lowestPrice: toInputNumber(pasted.menorValor),
+        arithmeticMean: toInputNumber(pasted.mediaAritmetica),
+        median: toInputNumber(pasted.mediana),
+        justification: pasted.justificativa,
       }))
-      setSuppliers(supplierValues)
+      setSuppliers(
+        EMPTY_SUPPLIERS.map((_, index) => ({
+          name: pasted.nomesEmpresas[index],
+          price: toInputNumber(pasted.valoresEmpresas[index]),
+        })),
+      )
       setFeedback({ message: 'Dados da planilha preenchidos.', isError: false })
     } catch {
       setFeedback({
@@ -187,8 +189,25 @@ function CotacaoFormPage({
       >
       </PageHeader>
 
+      {feedback && (
+        <p
+          role={feedback.isError ? 'alert' : 'status'}
+          className={`rounded-xl border p-3 text-sm font-semibold ${
+            feedback.isError ? 'border-red-200 bg-red-50 text-red-700' : 'border-brand-200 bg-brand-50 text-brand-700'
+          }`}
+        >
+          {feedback.message}
+        </p>
+      )}
+
       <form id={formId} className="flex flex-col gap-5" onSubmit={handleSubmit}>
         <section className="flex flex-col gap-4 rounded-2xl border border-line bg-white p-4 shadow-sm sm:p-5">
+          {status && (
+            <div className="flex flex-wrap items-center gap-2" aria-label="Status atual da cotação">
+              <span className="text-sm font-semibold text-ink">Status atual:</span>
+              <CotacaoStatusBadge status={status} />
+            </div>
+          )}
           {warning && (
             <div
               role="alert"
@@ -218,16 +237,15 @@ function CotacaoFormPage({
             </select>
           </Field>
 
-          <div className="rounded-xl border border-dashed border-brand-200 bg-brand-50 p-3">
-            <div className="[&>button]:w-full">
-              <Button type="button" variant="outline" icon="copy" onClick={handlePasteSpreadsheet}>
-                Colar dados da planilha
-              </Button>
+          {enableSpreadsheetPaste && (
+            <div className="rounded-xl border border-dashed border-brand-200 bg-brand-50 p-3">
+              <div className="[&>button]:w-full">
+                <Button type="button" variant="outline" icon="copy" onClick={handlePasteSpreadsheet}>
+                  Colar do Excel
+                </Button>
+              </div>
             </div>
-            <p className="mt-2 text-center text-xs text-ink-muted">
-              Cole uma linha separada por tabulações, na ordem dos campos exibidos.
-            </p>
-          </div>
+          )}
 
           <Field id="item" label="Item *" hint={`(máx. ${MAX_ITEM_LENGTH} caracteres)`}>
             <TextInput
@@ -456,19 +474,6 @@ function CotacaoFormPage({
             )}
           </div>
         </section>
-
-        {feedback && (
-          <p
-            role={feedback.isError ? 'alert' : 'status'}
-            className={`rounded-xl border p-3 text-sm font-semibold ${
-              feedback.isError
-                ? 'border-red-200 bg-red-50 text-red-700'
-                : 'border-brand-200 bg-brand-50 text-brand-700'
-            }`}
-          >
-            {feedback.message}
-          </p>
-        )}
       </form>
 
       {warning && isConfirmingSave && (

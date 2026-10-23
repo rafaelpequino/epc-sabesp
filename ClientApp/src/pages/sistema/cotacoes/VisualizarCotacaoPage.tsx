@@ -268,6 +268,12 @@ function VisualizarCotacaoPage() {
         Detalhes da cotação, propostas das empresas e anexos
       </PageHeader>
 
+      {deleteFeedback && (
+        <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
+          {deleteFeedback}
+        </p>
+      )}
+
       <CotacaoHero cotacao={cotacao} />
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -281,12 +287,6 @@ function VisualizarCotacaoPage() {
       </section>
 
       <AttachmentsSection attachments={cotacao.anexos} />
-
-      {deleteFeedback && (
-        <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
-          {deleteFeedback}
-        </p>
-      )}
 
       {isConfirmingDelete && (
         <ConfirmDialog

@@ -42,6 +42,12 @@ function IntencaoCotacaoPage() {
         }
       />
 
+      {feedback && (
+        <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
+          {feedback}
+        </p>
+      )}
+
       <form
         id={FORM_ID}
         className="flex flex-col gap-5 rounded-2xl border border-line bg-white p-4 shadow-sm sm:p-5"
@@ -84,12 +90,6 @@ function IntencaoCotacaoPage() {
             placeholder="Descrição do item"
           />
         </Field>
-
-        {feedback && (
-          <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
-            {feedback}
-          </p>
-        )}
       </form>
     </div>
   )

@@ -71,6 +71,8 @@ function EditarCotacaoPage() {
       formId="editar-cotacao-form"
       initialValues={toCotacaoFormValues(cotacao)}
       warning={COTACAO_EDIT_WARNING}
+      enableSpreadsheetPaste={cotacao.status === 'pendente'}
+      status={cotacao.status}
     />
   )
 }

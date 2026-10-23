@@ -16,6 +16,7 @@ function NovaCotacaoPage() {
       ]}
       onCancel={() => navigate(COTACOES_PATH)}
       formId="nova-cotacao-form"
+      enableSpreadsheetPaste
     />
   )
 }
