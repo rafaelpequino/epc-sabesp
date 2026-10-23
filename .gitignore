@@ -25,3 +25,4 @@ ClientApp/tsconfig.app.tsbuildinfo
 .vscode/
 *.log
 *.tmp
+*.txt
