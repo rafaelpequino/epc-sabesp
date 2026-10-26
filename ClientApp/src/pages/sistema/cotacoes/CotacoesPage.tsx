@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Button from '../../../components/common/Button'
 import ConfirmDialog from '../../../components/common/ConfirmDialog'
 import SearchBar from '../../../components/common/SearchBar'
+import { useToast } from '../../../components/common/useToast'
 import CotacaoFilters from '../../../components/cotacoes/CotacaoFilters'
 import CotacoesTable from '../../../components/cotacoes/CotacoesTable'
 import PageHeader from '../../../components/layout/PageHeader'
@@ -24,11 +25,11 @@ function CotacoesPage() {
   const [draft, setDraft] = useState<Filters>(EMPTY_COTACAO_FILTERS)
   const [applied, setApplied] = useState<Filters>(EMPTY_COTACAO_FILTERS)
   const [cotacaoToDelete, setCotacaoToDelete] = useState<Cotacao | null>(null)
-  const [deleteFeedback, setDeleteFeedback] = useState<string | null>(null)
+  const { showToast, toastElement } = useToast()
 
   function handleConfirmDelete() {
     setCotacaoToDelete(null)
-    setDeleteFeedback(COTACAO_DELETE_UNAVAILABLE_MESSAGE)
+    showToast(COTACAO_DELETE_UNAVAILABLE_MESSAGE)
   }
 
   const responsaveis = useMemo(() => uniqueValues(cotacoes, 'responsavel'), [cotacoes])
@@ -76,11 +77,7 @@ function CotacoesPage() {
         Banco de cotações especiais (não presentes no Banco de Preços da SABESP)
       </PageHeader>
 
-      {deleteFeedback && (
-        <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
-          {deleteFeedback}
-        </p>
-      )}
+      {toastElement}
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <SearchBar

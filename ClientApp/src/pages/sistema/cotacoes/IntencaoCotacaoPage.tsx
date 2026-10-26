@@ -4,6 +4,7 @@ import Button from '../../../components/common/Button'
 import Field from '../../../components/common/Field'
 import { FIELD_CLASSES } from '../../../components/common/fieldClasses'
 import TextInput from '../../../components/common/TextInput'
+import { useToast } from '../../../components/common/useToast'
 import PageHeader from '../../../components/layout/PageHeader'
 import { SETORES } from '../../../services/cotacoesService'
 
@@ -14,11 +15,11 @@ function IntencaoCotacaoPage() {
   const navigate = useNavigate()
   const [sector, setSector] = useState('')
   const [description, setDescription] = useState('')
-  const [feedback, setFeedback] = useState<string | null>(null)
+  const { showToast, toastElement } = useToast()
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    setFeedback('A intenção não foi registrada: a integração com a API ainda não está disponível.')
+    showToast('A intenção não foi registrada: a integração com a API ainda não está disponível.')
   }
 
   return (
@@ -42,11 +43,7 @@ function IntencaoCotacaoPage() {
         }
       />
 
-      {feedback && (
-        <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
-          {feedback}
-        </p>
-      )}
+      {toastElement}
 
       <form
         id={FORM_ID}

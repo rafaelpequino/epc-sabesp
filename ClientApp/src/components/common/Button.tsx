@@ -17,7 +17,7 @@ function Button({ variant = 'primary', icon, type = 'button', children, ...props
   return (
     <button
       type={type}
-      className={`inline-flex min-h-11 min-w-32 cursor-pointer items-center justify-center gap-2 rounded-lg px-5 text-sm font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${VARIANT_CLASSES[variant]}`}
+      className={`inline-flex min-h-11 min-w-32 cursor-pointer items-center justify-center gap-2 rounded-lg px-5 text-sm font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60 ${VARIANT_CLASSES[variant]}`}
       {...props}
     >
       {icon && <Icon name={icon} className="size-4" />}

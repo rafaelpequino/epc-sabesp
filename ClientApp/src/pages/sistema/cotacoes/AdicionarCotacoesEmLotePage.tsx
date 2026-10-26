@@ -6,6 +6,7 @@ import { FIELD_CLASSES } from '../../../components/common/fieldClasses'
 import Icon from '../../../components/common/Icon'
 import IconButton from '../../../components/common/IconButton'
 import SelectField from '../../../components/common/SelectField'
+import { useToast } from '../../../components/common/useToast'
 import {
   BulkParseError,
   matchFornecedores,
@@ -18,7 +19,6 @@ import PageHeader from '../../../components/layout/PageHeader'
 import { SETORES, formatPrice } from '../../../services/cotacoesService'
 import { getFornecedores } from '../../../services/fornecedoresService'
 
-type Feedback = { message: string; isError: boolean }
 type DetailKind = 'precos' | 'empresas'
 type DetailView = { id: string; kind: DetailKind }
 
@@ -196,13 +196,9 @@ function AdicionarCotacoesEmLotePage() {
   const fornecedores = useMemo(getFornecedores, [])
   const [cotacoes, setCotacoes] = useState<BulkCotacao[]>([])
   const [detail, setDetail] = useState<DetailView | null>(null)
-  const [feedback, setFeedback] = useState<Feedback | null>(null)
+  const { showToast: showError, closeToast, toastElement } = useToast()
 
   const hasCotacoes = cotacoes.length > 0
-
-  function showError(message: string) {
-    setFeedback({ message, isError: true })
-  }
 
   async function handlePaste() {
     if (!navigator.clipboard?.readText) {
@@ -226,7 +222,7 @@ function AdicionarCotacoesEmLotePage() {
     try {
       setCotacoes(matchFornecedores(parseBulkClipboard(text), fornecedores))
       setDetail(null)
-      setFeedback(null)
+      closeToast()
     } catch (error) {
       showError(error instanceof BulkParseError ? error.message : 'Não foi possível processar os dados colados.')
     }
@@ -263,7 +259,7 @@ function AdicionarCotacoesEmLotePage() {
   function reset() {
     setCotacoes([])
     setDetail(null)
-    setFeedback(null)
+    closeToast()
   }
 
   function toggleDetail(id: string, kind: DetailKind) {
@@ -302,16 +298,7 @@ function AdicionarCotacoesEmLotePage() {
         }
       />
 
-      {feedback && (
-        <p
-          role={feedback.isError ? 'alert' : 'status'}
-          className={`rounded-xl border p-3 text-sm font-semibold ${
-            feedback.isError ? 'border-red-200 bg-red-50 text-red-700' : 'border-brand-200 bg-brand-50 text-brand-700'
-          }`}
-        >
-          {feedback.message}
-        </p>
-      )}
+      {toastElement}
 
       {!hasCotacoes ? (
         <section className="flex flex-col items-center gap-3 rounded-2xl border border-line bg-white px-4 py-12 text-center shadow-sm">

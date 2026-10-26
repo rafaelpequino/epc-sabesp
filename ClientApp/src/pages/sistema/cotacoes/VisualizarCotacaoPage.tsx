@@ -3,6 +3,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import Button from '../../../components/common/Button'
 import ConfirmDialog from '../../../components/common/ConfirmDialog'
 import Icon, { type IconName } from '../../../components/common/Icon'
+import { useToast } from '../../../components/common/useToast'
 import CotacaoStatusBadge from '../../../components/cotacoes/CotacaoStatusBadge'
 import {
   COTACOES_PATH,
@@ -203,11 +204,11 @@ function VisualizarCotacaoPage() {
   const id = isCotacaoState(state) ? state.id : null
   const cotacao = useMemo(() => getCotacaoDetalhe(id ?? ''), [id])
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
-  const [deleteFeedback, setDeleteFeedback] = useState<string | null>(null)
+  const { showToast, toastElement } = useToast()
 
   function handleConfirmDelete() {
     setIsConfirmingDelete(false)
-    setDeleteFeedback(COTACAO_DELETE_UNAVAILABLE_MESSAGE)
+    showToast(COTACAO_DELETE_UNAVAILABLE_MESSAGE)
   }
 
   const backButton = (
@@ -268,11 +269,7 @@ function VisualizarCotacaoPage() {
         Detalhes da cotação, propostas das empresas e anexos
       </PageHeader>
 
-      {deleteFeedback && (
-        <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
-          {deleteFeedback}
-        </p>
-      )}
+      {toastElement}
 
       <CotacaoHero cotacao={cotacao} />
 

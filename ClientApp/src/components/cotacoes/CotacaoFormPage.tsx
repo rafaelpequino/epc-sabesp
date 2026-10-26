@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import Button from '../common/Button'
 import ConfirmDialog from '../common/ConfirmDialog'
 import Field from '../common/Field'
@@ -6,6 +6,7 @@ import { FIELD_CLASSES, TEXTAREA_CLASSES } from '../common/fieldClasses'
 import Icon from '../common/Icon'
 import IconButton from '../common/IconButton'
 import TextInput from '../common/TextInput'
+import { useToast } from '../common/useToast'
 import PageHeader, { type BreadcrumbItem } from '../layout/PageHeader'
 import { SETORES, type CotacaoStatus, type CotacaoWarning } from '../../services/cotacoesService'
 import CotacaoStatusBadge from './CotacaoStatusBadge'
@@ -22,6 +23,7 @@ import { parseCotacaoClipboard } from './colarExcel'
 
 const MAX_ITEM_LENGTH = 100
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
+const PASTE_LOCK_MS = 3000
 
 // O formulário usa vírgula decimal; o parser devolve números com ponto.
 function toInputNumber(value: string): string {
@@ -52,8 +54,32 @@ function CotacaoFormPage({
   const [fields, setFields] = useState(initialValues.fields)
   const [suppliers, setSuppliers] = useState(initialValues.suppliers)
   const [attachments, setAttachments] = useState<QuoteAttachment[]>(initialValues.attachments)
-  const [feedback, setFeedback] = useState<{ message: string; isError: boolean } | null>(null)
+  const { showToast, toastElement } = useToast()
   const [isConfirmingSave, setIsConfirmingSave] = useState(false)
+  const [isPasteLocked, setIsPasteLocked] = useState(false)
+  const isPasteLockedRef = useRef(false)
+  const pasteLockTimerRef = useRef<number | null>(null)
+
+  useEffect(
+    () => () => {
+      if (pasteLockTimerRef.current !== null) {
+        window.clearTimeout(pasteLockTimerRef.current)
+      }
+    },
+    [],
+  )
+
+  function lockPasteButton() {
+    isPasteLockedRef.current = true
+    setIsPasteLocked(true)
+    if (pasteLockTimerRef.current !== null) {
+      window.clearTimeout(pasteLockTimerRef.current)
+    }
+    pasteLockTimerRef.current = window.setTimeout(() => {
+      isPasteLockedRef.current = false
+      setIsPasteLocked(false)
+    }, PASTE_LOCK_MS)
+  }
 
   function updateField(field: keyof QuoteFields, value: string) {
     setFields((current) => ({ ...current, [field]: value }))
@@ -68,11 +94,11 @@ function CotacaoFormPage({
   }
 
   async function handlePasteSpreadsheet() {
+    if (isPasteLockedRef.current) return
+    lockPasteButton()
+
     if (!navigator.clipboard?.readText) {
-      setFeedback({
-        message: 'Não foi possível acessar a área de transferência neste navegador.',
-        isError: true,
-      })
+      showToast('Não foi possível acessar a área de transferência neste navegador.')
       return
     }
 
@@ -82,10 +108,7 @@ function CotacaoFormPage({
       try {
         pasted = parseCotacaoClipboard(clipboardText)
       } catch (parseError) {
-        setFeedback({
-          message: parseError instanceof Error ? parseError.message : 'Formato inválido.',
-          isError: true,
-        })
+        showToast(parseError instanceof Error ? parseError.message : 'Formato inválido.')
         return
       }
 
@@ -110,12 +133,10 @@ function CotacaoFormPage({
           price: toInputNumber(pasted.valoresEmpresas[index]),
         })),
       )
-      setFeedback({ message: 'Dados da planilha preenchidos.', isError: false })
+      showToast('Dados da planilha preenchidos.', 'success')
+      lockPasteButton()
     } catch {
-      setFeedback({
-        message: 'A área de transferência não pôde ser lida. Verifique a permissão do navegador.',
-        isError: true,
-      })
+      showToast('A área de transferência não pôde ser lida. Verifique a permissão do navegador.')
     }
   }
 
@@ -136,21 +157,16 @@ function CotacaoFormPage({
     })
 
     setAttachments((current) => [...current, ...validFiles])
-    setFeedback(
-      errors.length > 0
-        ? { message: errors.join(' '), isError: true }
-        : validFiles.length > 0
-          ? { message: `${validFiles.length} arquivo(s) adicionado(s).`, isError: false }
-          : null,
-    )
+    if (errors.length > 0) {
+      showToast(errors.join(' '))
+    } else if (validFiles.length > 0) {
+      showToast(`${validFiles.length} arquivo(s) adicionado(s).`, 'success')
+    }
     event.currentTarget.value = ''
   }
 
   function saveQuote() {
-    setFeedback({
-      message: 'A cotação não foi salva: a integração com a API ainda não está disponível.',
-      isError: true,
-    })
+    showToast('A cotação não foi salva: a integração com a API ainda não está disponível.')
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -189,16 +205,7 @@ function CotacaoFormPage({
       >
       </PageHeader>
 
-      {feedback && (
-        <p
-          role={feedback.isError ? 'alert' : 'status'}
-          className={`rounded-xl border p-3 text-sm font-semibold ${
-            feedback.isError ? 'border-red-200 bg-red-50 text-red-700' : 'border-brand-200 bg-brand-50 text-brand-700'
-          }`}
-        >
-          {feedback.message}
-        </p>
-      )}
+      {toastElement}
 
       <form id={formId} className="flex flex-col gap-5" onSubmit={handleSubmit}>
         <section className="flex flex-col gap-4 rounded-2xl border border-line bg-white p-4 shadow-sm sm:p-5">
@@ -240,7 +247,13 @@ function CotacaoFormPage({
           {enableSpreadsheetPaste && (
             <div className="rounded-xl border border-dashed border-brand-200 bg-brand-50 p-3">
               <div className="[&>button]:w-full">
-                <Button type="button" variant="outline" icon="copy" onClick={handlePasteSpreadsheet}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  icon="copy"
+                  onClick={handlePasteSpreadsheet}
+                  disabled={isPasteLocked}
+                >
                   Colar do Excel
                 </Button>
               </div>
