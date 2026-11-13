@@ -12,6 +12,7 @@ import EditarCotacaoPage from './pages/sistema/cotacoes/EditarCotacaoPage'
 import FornecedoresPage from './pages/sistema/FornecedoresPage'
 import PlanilhasPage from './pages/sistema/PlanilhasPage'
 import KitsDrcPage from './pages/sistema/KitsDrcPage'
+import KitDrcPage from './pages/sistema/KitDrcPage'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route element={<SistemaLayout />}>
           <Route index element={<InicioPage />} />
           <Route path="kits-drc" element={<KitsDrcPage />} />
+          <Route path="kits-drc/:kitId" element={<KitDrcPage />} />
           <Route path="cotacoes" element={<CotacoesPage />} />
           <Route path="cotacoes/nova-cotacao" element={<NovaCotacaoPage />} />
           <Route path="cotacoes/adicionar-em-lote" element={<AdicionarCotacoesEmLotePage />} />

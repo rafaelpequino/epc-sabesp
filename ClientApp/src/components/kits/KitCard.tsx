@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import Icon from '../common/Icon'
 import { IconBadge } from '../dashboard/Panel'
-import { KIT_FILTER_GROUPS, type DrcKit } from '../../services/kitsService'
+import { KIT_FILTER_GROUPS, getKitPath, type DrcKit } from '../../services/kitsService'
 
 const TAG_LABELS = Object.fromEntries(
   KIT_FILTER_GROUPS.flatMap((group) => group.options).map((option) => [option.id, option.label]),
@@ -42,7 +42,7 @@ function KitCard({ kit }: { kit: DrcKit }) {
 
       {isAvailable ? (
         <Link
-          to={kit.to}
+          to={getKitPath(kit.id)}
           className="flex items-center justify-between gap-3 border-t border-line bg-brand-50 px-5 py-3.5 text-sm font-semibold text-brand-600 transition-colors hover:bg-brand-100"
         >
           Acessar KIT

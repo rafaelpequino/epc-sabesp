@@ -1,16 +1,21 @@
 import FilterChip from '../common/FilterChip'
 import FilterPanel from '../common/FilterPanel'
-import { KIT_FILTER_GROUPS, type KitFilterGroup, type KitFilterId } from '../../services/kitsService'
+import {
+  KIT_FILTER_GROUPS,
+  type KitFilterGroup,
+  type KitFilterId,
+  type KitFilterSelection,
+} from '../../services/kitsService'
 
 type KitFiltersProps = {
-  activeFilter: KitFilterId | null
-  onChange: (filter: KitFilterId | null) => void
+  selection: KitFilterSelection
+  onChange: (selection: KitFilterSelection) => void
 }
 
 type FilterChipsProps = {
   group: KitFilterGroup
-  activeFilter: KitFilterId | null
-  onChange: (filter: KitFilterId | null) => void
+  activeFilter: KitFilterId | undefined
+  onChange: (filter: KitFilterId | undefined) => void
 }
 
 function FilterChips({ group, activeFilter, onChange }: FilterChipsProps) {
@@ -30,7 +35,7 @@ function FilterChips({ group, activeFilter, onChange }: FilterChipsProps) {
               key={option.id}
               label={option.label}
               isActive={isActive}
-              onClick={() => onChange(isActive ? null : option.id)}
+              onClick={() => onChange(isActive ? undefined : option.id)}
             />
           )
         })}
@@ -39,21 +44,29 @@ function FilterChips({ group, activeFilter, onChange }: FilterChipsProps) {
   )
 }
 
-function KitFilters({ activeFilter, onChange }: KitFiltersProps) {
+function KitFilters({ selection, onChange }: KitFiltersProps) {
   const [rede, metodo] = KIT_FILTER_GROUPS
+
+  function changeGroup(group: KitFilterGroup, filter: KitFilterId | undefined) {
+    onChange({ ...selection, [group.id]: filter })
+  }
 
   return (
     <FilterPanel
       label="Filtros de kits"
-      hasActiveFilters={activeFilter !== null}
-      onClear={() => onChange(null)}
-      clearLabel="Limpar filtro"
+      hasActiveFilters={Object.values(selection).some(Boolean)}
+      onClear={() => onChange({})}
+      clearLabel="Limpar filtros"
     >
       <div className="@container">
         <div className="flex flex-col gap-4 @min-[22rem]:flex-row @min-[22rem]:items-stretch @min-[22rem]:gap-6">
-          <FilterChips group={rede} activeFilter={activeFilter} onChange={onChange} />
+          <FilterChips group={rede} activeFilter={selection[rede.id]} onChange={(filter) => changeGroup(rede, filter)} />
           <div className="h-px bg-line @min-[22rem]:h-auto @min-[22rem]:w-px" aria-hidden="true" />
-          <FilterChips group={metodo} activeFilter={activeFilter} onChange={onChange} />
+          <FilterChips
+            group={metodo}
+            activeFilter={selection[metodo.id]}
+            onChange={(filter) => changeGroup(metodo, filter)}
+          />
         </div>
       </div>
     </FilterPanel>

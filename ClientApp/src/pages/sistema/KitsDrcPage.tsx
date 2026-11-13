@@ -2,13 +2,13 @@ import { useMemo, useState } from 'react'
 import KitCard from '../../components/kits/KitCard'
 import KitFilters from '../../components/kits/KitFilters'
 import PageHeader from '../../components/layout/PageHeader'
-import { getDrcKits, type KitFilterId } from '../../services/kitsService'
+import { filterKits, getDrcKits, type KitFilterSelection } from '../../services/kitsService'
 
 function KitsDrcPage() {
   const kits = useMemo(getDrcKits, [])
-  const [activeFilter, setActiveFilter] = useState<KitFilterId | null>(null)
+  const [selection, setSelection] = useState<KitFilterSelection>({})
 
-  const visibleKits = activeFilter ? kits.filter((kit) => kit.tags.includes(activeFilter)) : kits
+  const visibleKits = useMemo(() => filterKits(kits, selection), [kits, selection])
 
   return (
     <div className="flex flex-col gap-4">
@@ -19,7 +19,7 @@ function KitsDrcPage() {
         Geração automatizada de orçamentos baseada no Banco de Preços da SABESP.
       </PageHeader>
 
-      <KitFilters activeFilter={activeFilter} onChange={setActiveFilter} />
+      <KitFilters selection={selection} onChange={setSelection} />
 
       <p className="text-sm font-semibold text-ink-muted" role="status">
         {visibleKits.length} {visibleKits.length === 1 ? 'kit encontrado' : 'kits encontrados'}
